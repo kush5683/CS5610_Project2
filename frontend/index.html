@@ -31,6 +31,50 @@
   <main class="page-placeholder">
     <h1>Welcome to What To Watch</h1>
     <p>Select a section above to explore the app. These pages will wire into your Mongo-backed experience soon.</p>
+  
+  <section class="random-suggestion-generator container py-5">
+    <div class="text-center">
+      <button id="generateSuggestionBtn" class="btn btn--primary" type="button">Roll the dice 🎲</button>
+    </div>
+
+    <div class="suggestion-result" id="suggestionResult">
+      <!-- Suggestion will appear here -->
+      <div class="suggestion-layout">
+        <div class="suggestion-layout__poster">
+          <div class="card suggestion-card suggestion-card--poster">
+            <div class="card-body">
+              <div class="suggestion-card__poster">Poster</div>
+            </div>
+          </div>
+        </div>
+        <div class="suggestion-layout__title">
+          <div class="card suggestion-card suggestion-card--title">
+            <div class="card-body">
+              <div class="suggestion-card__header">
+                <div class="suggestion-card__primary">
+                  <h3 class="suggestion-card__title">Title</h3>
+                  <span class="badge bg-warning text-dark text-uppercase fw-semibold">2025</span>
+                </div>
+                <div class="suggestion-card__tags">
+                  <span class="badge bg-light text-dark">Action</span>
+                  <span class="badge bg-light text-dark">Adventure</span>
+                  <span class="badge bg-light text-dark">2h 15m</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suggestion-layout__description">
+          <div class="card suggestion-card suggestion-card--description">
+            <div class="card-body">
+              <p class="suggestion-card__description">Collaborative description will land here when the API responds.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   </main>
 </body>
 </html>
+
