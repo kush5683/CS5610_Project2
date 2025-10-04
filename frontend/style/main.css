@@ -1,0 +1,274 @@
+/* Theme tokens shared across the entire frontend */
+:root {
+  --nav-bg: rgba(6, 12, 16, 0.94);
+  --nav-border: rgba(255, 255, 255, 0.08);
+  --nav-text: #f4fbf8;
+  --nav-text-muted: rgba(244, 251, 248, 0.74);
+  --accent: #1fc8a4;
+  --accent-alt: #ff8a3d;
+  --accent-ghost: rgba(31, 200, 164, 0.16);
+  --bg: #05090d;
+}
+
+/* Normalize box sizing for predictable layouts */
+* {
+  box-sizing: border-box;
+}
+
+/* Full-page backdrop with flexible vertical layout */
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  background: radial-gradient(circle at 8% -15%, rgba(31, 200, 164, 0.28), transparent 55%),
+    radial-gradient(circle at 88% 5%, rgba(255, 138, 61, 0.22), transparent 60%),
+    var(--bg);
+  color: var(--nav-text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Allow the main content to expand while footer stays pinned */
+main {
+  flex: 1 0 auto;
+}
+
+/* Frosted glass navigation bar that sticks to the top */
+.wtw-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(8, 18, 22, 0.94), rgba(5, 10, 14, 0.94));
+  border-bottom: 1px solid var(--nav-border);
+  z-index: 1000;
+}
+
+/* Constrain nav content and distribute brand, links, and actions */
+.wtw-nav__inner {
+  max-width: min(95vw, 75rem);
+  margin: 0 auto;
+  padding: clamp(0.75rem, 1.5vw + 0.5rem, 1.25rem) clamp(1.25rem, 4vw, 1.75rem);
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* Uppercase brand treatment with icon spacing */
+.wtw-nav__brand {
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nav-text);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 0 0 auto;
+}
+
+/* Let primary navigation soak up remaining space */
+.wtw-nav__primary {
+  flex: 1 1 auto;
+}
+
+/* Horizontal nav list with even spacing */
+.wtw-nav__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Muted nav links that highlight on interaction */
+.wtw-nav__links a {
+  color: var(--nav-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  position: relative;
+  padding-bottom: 0.35rem;
+}
+
+/* Brighten active, hover, and focus states for nav links */
+.wtw-nav__links a:hover,
+.wtw-nav__links a:focus,
+.wtw-nav__links a.active {
+  color: var(--nav-text);
+}
+
+/* Animate the underline indicator for interactive nav links */
+.wtw-nav__links a:hover::after,
+.wtw-nav__links a:focus::after,
+.wtw-nav__links a.active::after {
+  transform: scaleX(1);
+}
+
+/* Right-aligned nav action buttons */
+.wtw-nav__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 0 auto;
+}
+
+/* Base pill-shaped button styling */
+.btn {
+  font-family: inherit;
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Visible focus ring for keyboard navigation */
+.btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.54);
+  outline-offset: 2px;
+}
+
+/* Gentle hover lift for all buttons */
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Outline button used for secondary actions */
+.btn--ghost {
+  background: transparent;
+  color: var(--nav-text);
+  border: 1px solid rgba(244, 251, 248, 0.36);
+}
+
+/* Subtle fill when hovering outline buttons */
+.btn--ghost:hover {
+  background: var(--accent-ghost);
+  border-color: rgba(244, 251, 248, 0.48);
+}
+
+/* Gradient primary button with glow */
+.btn--primary {
+  background: radial-gradient(circle at 0% 50%, var(--accent) 0%, #2de37b 60%, var(--accent-alt) 120%);
+  color: var(--nav-text);
+  box-shadow: 0 6px 18px rgba(31, 200, 164, 0.32);
+}
+
+/* Boost the glow on hover */
+.btn--primary:hover {
+  box-shadow: 0 10px 26px rgba(255, 138, 61, 0.34);
+}
+
+/* Active states for nav-level buttons */
+.btn--ghost.active,
+.btn--ghost[aria-current="page"] {
+  background: var(--accent-ghost);
+  border-color: rgba(244, 251, 248, 0.6);
+}
+
+.btn--primary.active,
+.btn--primary[aria-current="page"] {
+  box-shadow: 0 10px 26px rgba(255, 138, 61, 0.45);
+}
+
+/* Stack nav controls sooner on very small screens */
+@media (max-width: 36rem) {
+  .wtw-nav__links {
+    justify-content: flex-start;
+  }
+
+  .wtw-nav__actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
+
+/* Centered landing copy with responsive margins */
+.page-placeholder {
+  max-width: min(60rem, 90vw);
+  margin: clamp(4rem, 8vw, 6rem) auto 0;
+  padding: 0 clamp(1rem, 3vw, 1.5rem);
+  text-align: center;
+  color: var(--nav-text-muted);
+}
+
+/* Responsive hero heading */
+.page-placeholder h1 {
+  color: var(--nav-text);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin-bottom: 1rem;
+}
+
+/* Limit placeholder paragraph width for readability */
+.page-placeholder p {
+  max-width: min(40rem, 100%);
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Gradient footer bar with glass effect */
+.wtw-footer {
+  border-top: 1px solid var(--nav-border);
+  background: linear-gradient(135deg, rgba(6, 12, 16, 0.92), rgba(10, 20, 26, 0.88));
+  backdrop-filter: blur(12px);
+  color: var(--nav-text-muted);
+  padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+}
+
+/* Center footer content and add breathing room */
+.wtw-footer__inner {
+  max-width: min(60rem, 92vw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  align-items: center;
+  text-align: center;
+}
+
+/* Reset paragraph spacing inside footer */
+.wtw-footer p {
+  margin: 0;
+  color: inherit;
+}
+
+/* Pill CTA encouraging account creation */
+.wtw-footer__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(31, 200, 164, 0.16);
+  color: var(--nav-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* Elevate CTA on hover/focus */
+.wtw-footer__cta:hover,
+.wtw-footer__cta:focus {
+  transform: translateY(-2px);
+  background: rgba(31, 200, 164, 0.26);
+}
+
+/* Tiny uppercase legal line */
+.wtw-footer__legal {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

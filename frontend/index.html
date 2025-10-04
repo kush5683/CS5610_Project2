@@ -7,7 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style/styles.css">
+  <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/index.css">
 </head>
 <body>
   <header class="wtw-nav">
@@ -43,7 +44,7 @@
         <div class="suggestion-layout__poster">
           <div class="card suggestion-card suggestion-card--poster">
             <div class="card-body">
-              <div class="suggestion-card__poster">Poster</div>
+              <div class="suggestion-card__poster" id="suggestionPoster">Poster</div>
             </div>
           </div>
         </div>
@@ -52,8 +53,8 @@
             <div class="card-body">
               <div class="suggestion-card__header">
                 <div class="suggestion-card__primary">
-                  <h3 class="suggestion-card__title">Title</h3>
-                  <span class="badge bg-warning text-dark text-uppercase fw-semibold">2025</span>
+                  <h3 class="suggestion-card__title" id="suggestionTitle">Title</h3>
+                  <span class="badge bg-warning text-dark text-uppercase fw-semibold" id="suggestionReleaseDate">2025</span>
                 </div>
               </div>
             </div>
@@ -62,7 +63,15 @@
         <div class="suggestion-layout__description">
           <div class="card suggestion-card suggestion-card--description">
             <div class="card-body">
-              <p class="suggestion-card__description">Collaborative description will land here when the API responds.</p>
+              <p class="suggestion-card__description" id="suggestionDescription">Collaborative description will land here when the API responds.</p>
+            </div>
+          </div>
+        </div>
+        <div class="suggestion-layout__providers">
+          <div class="card suggestion-card suggestion-card--providers">
+            <div class="card-body">
+              <h4 class="suggestion-card__providers-title">Available On:</h4>
+              <div class="suggestion-card__providers-list" id="suggestionProviders">Providers will appear here.</div>
             </div>
           </div>
         </div>
@@ -71,7 +80,13 @@
   </section>
   </main>
 
+  <footer class="wtw-footer">
+    <div class="wtw-footer__inner">
+      <a class="wtw-footer__cta" href="get-started.html">Join the community</a>
+      <p class="wtw-footer__legal">All movie data sourced from TMDB</p>
+    </div>
+  </footer>
+
   <script src="js/frontend.js"></script>
 </body>
 </html>
-
