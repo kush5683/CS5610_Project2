@@ -186,6 +186,9 @@ body {
 .suggestion-result {
   margin-top: 2.5rem;
   align-items: center;
+  background: rgba(31, 200, 164, 0.15);
+  border-radius: 16px;
+  padding: 1em;
 }
 
 .suggestion-card {
@@ -631,7 +634,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
+  /* align-items: flex-end; */
+  justify-content: right;
   gap: 1rem 2rem;
 }
 
