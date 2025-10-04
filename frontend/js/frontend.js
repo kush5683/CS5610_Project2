@@ -10,7 +10,6 @@ document.getElementById("generateSuggestionBtn").addEventListener("click", async
     let resultReleaseDate = document.getElementById("suggestionReleaseDate");
     let resultDescription = document.getElementById("suggestionDescription");
     let resultProviders = document.getElementById("suggestionProviders");
-    //TODO: Fetch random suggestion from backend
 
     let suggestion = await fetch('/api/get-random-movie').then(response => response.json())
     // debugger;
