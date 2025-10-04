@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 const router = Router();
 
+console.log("Data JS loaded successfully.");
+
 router.get('/get-random-movie', (req, res) => {
     //TODO: Replace with actual random movie fetching logic
     res.json({
