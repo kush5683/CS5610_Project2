@@ -1,5 +1,6 @@
 import express from "express";
 import dataRoutes from "./data.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

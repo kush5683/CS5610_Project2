@@ -46,7 +46,7 @@
       <h1 id="signinHeading">Sign in to your account</h1>
       <p class="auth-panel__subtitle">Use your email and password or continue with a single tap.</p>
 
-      <form class="auth-form" action="#" method="post">
+      <form class="auth-form" id="signinForm">
         <div class="form-field">
           <label for="signinEmail">Email address</label>
           <input id="signinEmail" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
@@ -66,12 +66,12 @@
         </div>
 
         <button class="btn btn--primary btn--block" type="submit">Sign In</button>
-
-
       </form>
 
       <p class="auth-panel__footer">New here? <a class="auth-link" href="get-started.html">Create an account</a> to start building your watchlist.</p>
     </section>
   </main>
+
+  <script src="js/auth.js"></script>
 </body>
 </html>

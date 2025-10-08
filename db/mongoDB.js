@@ -1,0 +1,132 @@
+import { MongoClient, ObjectId } from 'mongodb';
+
+export default function mongoDB({
+    dbName = 'WhatToWatch',
+    collectionName = 'users',
+    defaultUri = 'mongodb://localhost:27017/',
+} = {}) {
+    const me = {};
+    const uri = defaultUri;
+
+    // Connect to MongoDB
+    const connect = async () => {
+        const client = new MongoClient(uri);
+        await client.connect();
+        const db = client.db(dbName);
+        const users = db.collection(collectionName);
+        
+        return { client, db, users };
+    };
+
+    // get watchlist 
+    me.getWatchlist = async (userId) => {
+        try {
+            const { client, users } = await connect();
+            const user = await users.findOne({ _id: new ObjectId(userId) });
+            await client.close();
+            
+            return user ? (user.watchlist || []) : [];
+        } catch (error) {
+            console.error('Error getting watchlist:', error);
+            throw error;
+        }
+    };
+
+    // get usres
+    me.getUsers = async () => {
+        try {
+            const { client, users } = await connect();
+            const allUsers = await users.find({}).toArray();
+            await client.close();
+            
+            return allUsers;
+        } catch (error) {
+            console.error('Error getting users:', error);
+            throw error;
+        }
+    };
+
+    // create user
+    me.addUser = async (user) => {
+        try {
+            const { client, users } = await connect();
+            const newUser = {
+                ...user,
+                watchlist: [], // Initialize empty watchlist
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            
+            const result = await users.insertOne(newUser);
+            await client.close();
+            
+            return result;
+        } catch (error) {
+            console.error('Error adding user:', error);
+            throw error;
+        }
+    };
+
+    me.getUserByEmail = async (email) => {
+        try {
+            const { client, users } = await connect();
+            const user = await users.findOne({ email: email.toLowerCase() });
+            await client.close();
+            
+            return user;
+        } catch (error) {
+            console.error('Error getting user by email:', error);
+            throw error;
+        }
+    };
+
+    me.addToWatchlist = async (userId, movie) => {
+        try {
+            console.log('Adding to watchlist - userId:', userId, 'movie:', movie.title);
+            const { client, users } = await connect();
+            
+            //prevent duplicates using set 
+            const result = await users.updateOne(
+                { _id: new ObjectId(userId) },
+                { 
+                    $addToSet: { 
+                        watchlist: {
+                            ...movie,
+                            addedAt: new Date()
+                        }
+                    },
+                    $set: { updatedAt: new Date() }
+                }
+            );
+            
+            console.log('Update result:', result);
+            await client.close();
+            return result;
+        } catch (error) {
+            console.error('Error adding to watchlist:', error);
+            throw error;
+        }
+    };
+
+    me.removeFromWatchlist = async (userId, movieId) => {
+        try {
+            const { client, users } = await connect();
+            
+            const result = await users.updateOne(
+                { _id: new ObjectId(userId) },
+                { 
+                    $pull: { watchlist: { id: parseInt(movieId) } },
+                    $set: { updatedAt: new Date() }
+                }
+            );
+            
+            await client.close();
+            return result;
+        } catch (error) {
+            console.error('Error removing from watchlist:', error);
+            throw error;
+        }
+    };
+
+    return me;
+} 

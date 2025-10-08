@@ -116,6 +116,14 @@ main {
   flex: 0 0 auto;
 }
 
+/* User greeting styles */
+.user-greeting {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
 /* Base pill-shaped button styling */
 .btn {
   font-family: inherit;
@@ -264,6 +272,115 @@ main {
 .wtw-footer__cta:focus {
   transform: translateY(-2px);
   background: rgba(31, 200, 164, 0.26);
+}
+
+/* Watchlist Page Styles */
+.watchlist-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.watchlist-subtitle {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.watchlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.watchlist-item {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.watchlist-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.watchlist-item__poster {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.watchlist-item__poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.watchlist-item__content {
+  padding: 1rem;
+}
+
+.watchlist-item__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.watchlist-item__year {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.watchlist-item__overview {
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.watchlist-item__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.watchlist-item__added {
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-left: auto;
+}
+
+.btn--remove {
+  background: #ef4444;
+  color: white;
+}
+
+.btn--remove:hover {
+  background: #dc2626;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.py-5 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
 /* Tiny uppercase legal line */

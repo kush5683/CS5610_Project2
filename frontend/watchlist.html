@@ -28,9 +28,36 @@
     </div>
   </header>
 
-  <main class="page-placeholder">
-    <h1>Watchlist</h1>
-    <p>Save titles you want to revisit. A personalized queue will live on this page.</p>
+  <main class="container py-5">
+    <div class="watchlist-header">
+      <h1>My Watchlist</h1>
+      <p class="watchlist-subtitle">Movies you've saved to watch later</p>
+    </div>
+
+    <!-- Loading state -->
+    <div id="watchlistLoading" class="text-center" style="display: none;">
+      <p>Loading your watchlist...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="watchlistEmpty" class="text-center" style="display: none;">
+      <h3>Your watchlist is empty</h3>
+      <p>Start adding movies from our <a href="index.html">recommendations</a>!</p>
+    </div>
+
+    <!-- Not logged in state -->
+    <div id="watchlistNotLoggedIn" class="text-center" style="display: none;">
+      <h3>Please sign in to view your watchlist</h3>
+      <a href="sign-in.html" class="btn btn--primary">Sign In</a>
+    </div>
+
+    <!-- Watchlist content -->
+    <div id="watchlistContent" class="watchlist-grid" style="display: none;">
+      <!-- Movies dynamically inserted here -->
+    </div>
   </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/watchlist.js"></script>
 </body>
 </html>
