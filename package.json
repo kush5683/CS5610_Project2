@@ -13,7 +13,7 @@
     "url": "git+https://github.com/kush5683/CS5610_Project2.git"
   },
   "keywords": [],
-  "author": "Kush Shah",
+  "author": "Kush Shah, Phillip Chandy",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kush5683/CS5610_Project2/issues"
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "express": "^5.1.0",
+    "mongodb": "^6.20.0",
     "nodemon": "^3.1.10"
   }
 }
