@@ -8,6 +8,7 @@ const db = mongoDB(); // Initialize MongoDB connection
 
 // Load movies data
 let moviesData = [];
+let seriesData = [];
 try {
   const moviesPath = path.join(process.cwd(), 'movies.json');
   const moviesFile = fs.readFileSync(moviesPath, 'utf8');
@@ -15,6 +16,15 @@ try {
   console.log(`Loaded ${moviesData.length} movies from movies.json`);
 } catch (error) {
   console.error('Error loading movies.json:', error);
+}
+
+try {
+  const seriesPath = path.join(process.cwd(), 'tv_shows.json');
+  const seriesFile = fs.readFileSync(seriesPath, 'utf8');
+  seriesData = JSON.parse(seriesFile);
+  console.log(`Loaded ${seriesData.length} series from tv_shows.json`);
+} catch (error) {
+  console.error('Error loading tv_shows.json:', error);
 }
 
 console.log("Data JS loaded successfully.");
@@ -74,6 +84,47 @@ router.get("/movies", (req, res) => {
   } catch (error) {
     console.error("Error getting movies page:", error);
     res.status(500).json({ error: "Failed to get movies" });
+  }
+});
+
+router.get("/series", (req, res) => {
+  try {
+    if (seriesData.length === 0) {
+      return res.status(500).json({ error: "No series data available" });
+    }
+
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const pageSize = parseInt(req.query.pageSize, 10) || 50;
+    const validPageSizes = [50, 100, 250, 500];
+    const normalizedPageSize = validPageSizes.includes(pageSize) ? pageSize : 50;
+
+    const startIndex = (page - 1) * normalizedPageSize;
+
+    if (startIndex >= seriesData.length) {
+      return res.json({
+        page,
+        pageSize: normalizedPageSize,
+        totalSeries: seriesData.length,
+        totalPages: Math.ceil(seriesData.length / normalizedPageSize),
+        series: [],
+      });
+    }
+
+    const pagedSeries = seriesData.slice(
+      startIndex,
+      startIndex + normalizedPageSize
+    );
+
+    res.json({
+      page,
+      pageSize: normalizedPageSize,
+      totalSeries: seriesData.length,
+      totalPages: Math.ceil(seriesData.length / normalizedPageSize),
+      series: pagedSeries,
+    });
+  } catch (error) {
+    console.error("Error getting series page:", error);
+    res.status(500).json({ error: "Failed to get series" });
   }
 });
 

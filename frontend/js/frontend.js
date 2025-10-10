@@ -94,6 +94,23 @@ if (topMoviesCarousel) {
   initializeTopMoviesCarousel();
 }
 
+const topSeriesCarousel = document.getElementById("topSeriesCarousel");
+const topSeriesPrev = document.getElementById("topSeriesPrev");
+const topSeriesNext = document.getElementById("topSeriesNext");
+const topSeriesDots = document.getElementById("topSeriesDots");
+
+const topSeriesState = {
+  series: [],
+  extendedSeries: [],
+  currentSlide: 0,
+  itemsPerSlide: 4,
+  visualIndex: 0,
+};
+
+if (topSeriesCarousel) {
+  initializeTopSeriesCarousel();
+}
+
 function handleTopMovieSelect(movie) {
   if (!movie) return;
   try {
@@ -428,6 +445,356 @@ function calculateTopMoviesItemsPerSlide() {
 function getTopMoviesSlideCount() {
   if (!topMoviesState.movies.length) return 0;
   return Math.ceil(topMoviesState.movies.length / topMoviesState.itemsPerSlide);
+}
+
+function handleTopSeriesSelect(series) {
+  if (!series) return;
+  try {
+    sessionStorage.setItem("series:selectedSeries", JSON.stringify(series));
+  } catch (error) {
+    console.error("Failed to cache selected series:", error);
+  }
+  window.location.href = "series.html";
+}
+
+function prepareTopSeriesExtendedData({ preserveSlide = false } = {}) {
+  const shows = topSeriesState.series;
+  const baseSlides = getTopSeriesSlideCount();
+
+  if (!shows.length) {
+    topSeriesState.extendedSeries = [];
+    topSeriesState.currentSlide = 0;
+    topSeriesState.visualIndex = 0;
+    return;
+  }
+
+  if (!preserveSlide) {
+    topSeriesState.currentSlide = 0;
+  } else if (baseSlides > 0) {
+    topSeriesState.currentSlide = Math.min(topSeriesState.currentSlide, baseSlides - 1);
+  } else {
+    topSeriesState.currentSlide = 0;
+  }
+
+  if (baseSlides <= 1) {
+    topSeriesState.extendedSeries = [...shows];
+    topSeriesState.visualIndex = 0;
+    return;
+  }
+
+  const groupSize = topSeriesState.itemsPerSlide;
+  const slides = [];
+
+  for (let i = 0; i < shows.length; i += groupSize) {
+    const slice = shows.slice(i, i + groupSize);
+    while (slice.length < groupSize) {
+      slice.push(null);
+    }
+    slides.push(slice);
+  }
+
+  const headSlide = slides[0].slice();
+  const tailSlide = slides[slides.length - 1].slice();
+
+  topSeriesState.extendedSeries = [...tailSlide, ...slides.flat(), ...headSlide];
+  topSeriesState.visualIndex = topSeriesState.currentSlide + 1;
+}
+
+function initializeTopSeriesCarousel() {
+  topSeriesState.itemsPerSlide = calculateTopSeriesItemsPerSlide();
+  applyTopSeriesLayout();
+  loadTopSeriesCarousel();
+
+  topSeriesCarousel?.addEventListener("transitionend", handleTopSeriesTransitionEnd);
+  topSeriesPrev?.addEventListener("click", () => moveTopSeriesSlide(-1));
+  topSeriesNext?.addEventListener("click", () => moveTopSeriesSlide(1));
+  topSeriesDots?.addEventListener("click", handleTopSeriesDotClick);
+  window.addEventListener("resize", handleTopSeriesResize);
+}
+
+async function loadTopSeriesCarousel() {
+  try {
+    const response = await fetch("/api/series?page=1&pageSize=50");
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    topSeriesState.series = (data.series || [])
+      .slice(0, 15)
+      .map(normalizeSeriesForCarousel);
+
+    topSeriesState.currentSlide = 0;
+    prepareTopSeriesExtendedData();
+
+    if (!topSeriesState.series.length) {
+      renderTopSeriesEmpty("No series available right now.");
+      return;
+    }
+
+    renderTopSeries(topSeriesState.extendedSeries.length ? topSeriesState.extendedSeries : topSeriesState.series);
+    updateTopSeriesCarousel({ immediate: true });
+  } catch (error) {
+    console.error("Error loading top series:", error);
+    renderTopSeriesEmpty("Unable to load top series right now.");
+  }
+}
+
+function renderTopSeries(seriesItems) {
+  topSeriesCarousel.innerHTML = "";
+  if (!seriesItems.length) {
+    renderTopSeriesEmpty("No series available right now.");
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  seriesItems.forEach((show) => {
+    const item = document.createElement("li");
+    item.className = "top-movies__item";
+
+    if (!show) {
+      item.innerHTML = `
+        <article class="top-movie-card top-movie-card--placeholder" aria-hidden="true"></article>
+      `;
+      fragment.appendChild(item);
+      return;
+    }
+
+    const posterUrl = show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+    const title = escapeHtml(show.title || "Untitled Series");
+    const releaseYear = escapeHtml(show.releaseYear || "N/A");
+    const ratingValue = Number(show.vote_average);
+    const rating = Number.isFinite(ratingValue) ? ratingValue.toFixed(1) : "N/A";
+
+    item.innerHTML = `
+      <article class="top-movie-card">
+        <div class="top-movie-card__poster">
+          <img src="${posterUrl}" alt="Poster for ${title}" loading="lazy" />
+        </div>
+        <h3 class="top-movie-card__title">${title}</h3>
+        <p class="top-movie-card__meta">${releaseYear} &bull; ⭐ ${rating}</p>
+      </article>
+    `;
+
+    const card = item.querySelector(".top-movie-card");
+    card.dataset.seriesId = show.id;
+    card.addEventListener("click", () => handleTopSeriesSelect(show));
+
+    fragment.appendChild(item);
+  });
+
+  topSeriesCarousel.appendChild(fragment);
+  renderTopSeriesDots();
+  applyTopSeriesLayout();
+}
+
+function renderTopSeriesDots() {
+  if (!topSeriesDots) return;
+
+  const slideCount = getTopSeriesSlideCount();
+  topSeriesDots.innerHTML = "";
+  topSeriesDots.hidden = slideCount <= 1;
+
+  for (let i = 0; i < slideCount; i += 1) {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "top-movies__dot";
+    dot.dataset.slideIndex = String(i);
+    dot.setAttribute("aria-label", `Go to series slide ${i + 1}`);
+    dot.setAttribute("aria-selected", i === topSeriesState.currentSlide ? "true" : "false");
+    topSeriesDots.appendChild(dot);
+  }
+}
+
+function renderTopSeriesEmpty(message) {
+  topSeriesState.series = [];
+  topSeriesState.extendedSeries = [];
+  topSeriesState.currentSlide = 0;
+  topSeriesState.visualIndex = 0;
+  topSeriesCarousel.innerHTML = `
+    <li class="top-movies__item top-movies__item--message">
+      <p class="top-movies__message">${escapeHtml(message)}</p>
+    </li>
+  `;
+  topSeriesCarousel.style.setProperty("--items-per-slide", 1);
+  topSeriesCarousel.style.setProperty("--carousel-offset", "0%");
+  topSeriesPrev?.setAttribute("disabled", "true");
+  topSeriesNext?.setAttribute("disabled", "true");
+  if (topSeriesDots) {
+    topSeriesDots.hidden = true;
+    topSeriesDots.innerHTML = "";
+  }
+}
+
+function moveTopSeriesSlide(direction) {
+  const slideCount = getTopSeriesSlideCount();
+  if (slideCount <= 1 || !topSeriesState.extendedSeries.length) return;
+
+  topSeriesState.visualIndex += direction;
+
+  const normalized =
+    ((topSeriesState.visualIndex - 1) % slideCount + slideCount) % slideCount;
+  topSeriesState.currentSlide = normalized;
+
+  updateTopSeriesCarousel();
+}
+
+function handleTopSeriesDotClick(event) {
+  const target = event.target.closest("button[data-slide-index]");
+  if (!target) return;
+  const index = Number.parseInt(target.dataset.slideIndex || "0", 10);
+  const slideCount = getTopSeriesSlideCount();
+  if (!Number.isNaN(index) && slideCount > 0) {
+    topSeriesState.currentSlide = Math.min(index, slideCount - 1);
+    topSeriesState.visualIndex =
+      slideCount > 1 ? topSeriesState.currentSlide + 1 : topSeriesState.currentSlide;
+    updateTopSeriesCarousel();
+  }
+}
+
+function handleTopSeriesResize() {
+  const newItemsPerSlide = calculateTopSeriesItemsPerSlide();
+  if (newItemsPerSlide !== topSeriesState.itemsPerSlide) {
+    topSeriesState.itemsPerSlide = newItemsPerSlide;
+    applyTopSeriesLayout();
+    if (!topSeriesState.series.length) {
+      updateTopSeriesCarousel({ immediate: true });
+      return;
+    }
+    prepareTopSeriesExtendedData({ preserveSlide: true });
+    renderTopSeries(topSeriesState.extendedSeries.length ? topSeriesState.extendedSeries : topSeriesState.series);
+    updateTopSeriesCarousel({ immediate: true });
+  }
+}
+
+function applyTopSeriesLayout() {
+  topSeriesCarousel?.style.setProperty(
+    "--items-per-slide",
+    String(topSeriesState.itemsPerSlide)
+  );
+}
+
+function handleTopSeriesTransitionEnd(event) {
+  if (!topSeriesCarousel || event.target !== topSeriesCarousel) return;
+  if (event.propertyName !== "transform") return;
+  const slideCount = getTopSeriesSlideCount();
+  if (slideCount <= 1) return;
+
+  if (topSeriesState.visualIndex === 0) {
+    topSeriesState.visualIndex = slideCount;
+    topSeriesState.currentSlide = slideCount - 1;
+    updateTopSeriesCarousel({ immediate: true });
+  } else if (topSeriesState.visualIndex === slideCount + 1) {
+    topSeriesState.visualIndex = 1;
+    topSeriesState.currentSlide = 0;
+    updateTopSeriesCarousel({ immediate: true });
+  }
+}
+
+function updateTopSeriesCarousel({ immediate = false } = {}) {
+  const slideCount = getTopSeriesSlideCount();
+  if (slideCount > 0) {
+    topSeriesState.currentSlide = Math.max(
+      Math.min(topSeriesState.currentSlide, slideCount - 1),
+      0
+    );
+  } else {
+    topSeriesState.currentSlide = 0;
+  }
+
+  const usesLooping = slideCount > 1 && topSeriesState.extendedSeries.length > 0;
+
+  if (usesLooping) {
+    topSeriesState.visualIndex = Math.max(
+      Math.min(topSeriesState.visualIndex, slideCount + 1),
+      0
+    );
+  } else {
+    topSeriesState.visualIndex = topSeriesState.currentSlide;
+  }
+
+  if (topSeriesCarousel) {
+    if (immediate) {
+      topSeriesCarousel.style.transition = "none";
+    }
+
+    const offsetIndex = usesLooping
+      ? topSeriesState.visualIndex
+      : topSeriesState.currentSlide;
+
+    const setOffset = () => {
+      topSeriesCarousel.style.setProperty(
+        "--carousel-offset",
+        `-${offsetIndex * 100}%`
+      );
+
+      if (immediate) {
+        requestAnimationFrame(() => {
+          topSeriesCarousel.style.transition = "";
+        });
+      }
+    };
+
+    if (immediate) {
+      requestAnimationFrame(setOffset);
+    } else {
+      setOffset();
+    }
+  }
+
+  const disableNavigation = slideCount <= 1;
+
+  if (topSeriesPrev) {
+    topSeriesPrev.disabled = disableNavigation;
+  }
+  if (topSeriesNext) {
+    topSeriesNext.disabled = disableNavigation;
+  }
+
+  if (topSeriesDots) {
+    Array.from(topSeriesDots.children).forEach((dot, index) => {
+      const button = dot;
+      if (button instanceof HTMLButtonElement) {
+        if (index === topSeriesState.currentSlide) {
+          button.classList.add("is-active");
+          button.setAttribute("aria-selected", "true");
+        } else {
+          button.classList.remove("is-active");
+          button.setAttribute("aria-selected", "false");
+        }
+      }
+    });
+  }
+}
+
+function calculateTopSeriesItemsPerSlide() {
+  const width = window.innerWidth || document.documentElement.clientWidth;
+  if (width < 600) return 1;
+  if (width < 900) return 2;
+  if (width < 1200) return 3;
+  return 5;
+}
+
+function getTopSeriesSlideCount() {
+  if (!topSeriesState.series.length) return 0;
+  return Math.ceil(topSeriesState.series.length / topSeriesState.itemsPerSlide);
+}
+
+function normalizeSeriesForCarousel(rawSeries) {
+  const title = rawSeries.title || rawSeries.name || "Untitled Series";
+  const releaseYear = rawSeries.first_air_date
+    ? rawSeries.first_air_date.split("-")[0]
+    : rawSeries.release_date
+    ? rawSeries.release_date.split("-")[0]
+    : "N/A";
+
+  return {
+    ...rawSeries,
+    title,
+    releaseYear,
+  };
 }
 
 function escapeHtml(value) {

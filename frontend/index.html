@@ -83,7 +83,7 @@
   <section class="top-movies section-spacing" aria-labelledby="topMoviesHeading">
     <div class="container">
       <div class="top-movies__header">
-        <h2 id="topMoviesHeading">Top Movies This Week</h2>
+        <h2 id="topMoviesHeading">Top Movies</h2>
         <div class="top-movies__controls" aria-label="Top movies carousel controls">
           <button id="topMoviesPrev" class="btn btn--ghost carousel-btn" type="button" aria-label="Previous movies">&larr;</button>
           <button id="topMoviesNext" class="btn btn--ghost carousel-btn" type="button" aria-label="Next movies">&rarr;</button>
@@ -93,6 +93,22 @@
         <ul id="topMoviesCarousel" class="top-movies__list" aria-live="polite"></ul>
       </div>
       <div class="top-movies__pagination" role="tablist" aria-label="Carousel dot controls" id="topMoviesDots"></div>
+    </div>
+  </section>
+
+  <section class="top-movies section-spacing" aria-labelledby="topSeriesHeading">
+    <div class="container">
+      <div class="top-movies__header">
+        <h2 id="topSeriesHeading">Top Series</h2>
+        <div class="top-movies__controls" aria-label="Top series carousel controls">
+          <button id="topSeriesPrev" class="btn btn--ghost carousel-btn" type="button" aria-label="Previous series">&larr;</button>
+          <button id="topSeriesNext" class="btn btn--ghost carousel-btn" type="button" aria-label="Next series">&rarr;</button>
+        </div>
+      </div>
+      <div class="top-movies__viewport">
+        <ul id="topSeriesCarousel" class="top-movies__list" aria-live="polite"></ul>
+      </div>
+      <div class="top-movies__pagination" role="tablist" aria-label="Series carousel dot controls" id="topSeriesDots"></div>
     </div>
   </section>
   </main>
