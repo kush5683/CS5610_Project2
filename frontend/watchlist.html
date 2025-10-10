@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/index.css">
 </head>
 <body>
   <header class="wtw-nav">
@@ -28,33 +29,41 @@
     </div>
   </header>
 
-  <main class="container py-5">
-    <div class="watchlist-header">
-      <h1>My Watchlist</h1>
-      <p class="watchlist-subtitle">Movies you've saved to watch later</p>
-    </div>
+  <main class="page-placeholder">
+    <section class="top-movies section-spacing watchlist-section" aria-labelledby="watchlistHeading">
+      <div class="container">
+        <div class="top-movies__header">
+          <div class="watchlist-header">
+            <h1 id="watchlistHeading">My Watchlist</h1>
+            <p class="watchlist-subtitle">Movies you've saved to watch later</p>
+          </div>
+          <div class="top-movies__controls" id="watchlistControls" aria-label="Watchlist carousel controls">
+            <button id="watchlistPrev" class="btn btn--ghost carousel-btn" type="button" aria-label="Previous watchlist title">&larr;</button>
+            <button id="watchlistNext" class="btn btn--ghost carousel-btn" type="button" aria-label="Next watchlist title">&rarr;</button>
+          </div>
+        </div>
 
-    <!-- Loading state -->
-    <div id="watchlistLoading" class="text-center" style="display: none;">
-      <p>Loading your watchlist...</p>
-    </div>
+        <div id="watchlistLoading" class="text-center" hidden>
+          <p>Loading your watchlist...</p>
+        </div>
 
-    <!-- Empty state -->
-    <div id="watchlistEmpty" class="text-center" style="display: none;">
-      <h3>Your watchlist is empty</h3>
-      <p>Start adding movies from our <a href="index.html">recommendations</a>!</p>
-    </div>
+        <div id="watchlistEmpty" class="text-center" hidden>
+          <h3>Your watchlist is empty</h3>
+          <p>Start adding movies from our <a href="index.html">recommendations</a>!</p>
+        </div>
 
-    <!-- Not logged in state -->
-    <div id="watchlistNotLoggedIn" class="text-center" style="display: none;">
-      <h3>Please sign in to view your watchlist</h3>
-      <a href="sign-in.html" class="btn btn--primary">Sign In</a>
-    </div>
+        <div id="watchlistNotLoggedIn" class="text-center" hidden>
+          <h3>Please sign in to view your watchlist</h3>
+          <a href="sign-in.html" class="btn btn--primary">Sign In</a>
+        </div>
 
-    <!-- Watchlist content -->
-    <div id="watchlistContent" class="watchlist-grid" style="display: none;">
-      <!-- Movies dynamically inserted here -->
-    </div>
+        <div class="top-movies__viewport" id="watchlistViewport" hidden>
+          <ul id="watchlistCarousel" class="top-movies__list watchlist-carousel" aria-live="polite"></ul>
+        </div>
+
+        <div class="top-movies__pagination" role="tablist" aria-label="Watchlist carousel dot controls" id="watchlistDots" hidden></div>
+      </div>
+    </section>
   </main>
 
   <script src="js/auth.js"></script>

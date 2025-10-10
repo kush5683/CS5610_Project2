@@ -138,6 +138,9 @@ function renderMovies(movies) {
 
   moviesGrid.appendChild(fragment);
   maybeShowPendingMovie();
+  if (typeof refreshWatchlistHighlights === "function") {
+    refreshWatchlistHighlights();
+  }
 }
 
 // Keep the UI pagination summary, visibility, and button states in sync.
@@ -292,7 +295,8 @@ function addWatchlistButtonToDetail(movie) {
   watchlistBtn.className = "btn btn--primary suggestion-watchlist-btn watchlist-btn";
   watchlistBtn.textContent = "Add to Watchlist";
   watchlistBtn.dataset.movieId = movieId;
-  watchlistBtn.dataset.movieData = JSON.stringify(movie);
+  const watchlistPayload = { ...movie, mediaType: "movie" };
+  watchlistBtn.dataset.movieData = JSON.stringify(watchlistPayload);
 
   movieDetailActions.appendChild(watchlistBtn);
 

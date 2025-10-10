@@ -138,6 +138,9 @@ function renderSeries(series) {
 
   seriesGrid.appendChild(fragment);
   maybeShowPendingSeries();
+  if (typeof refreshWatchlistHighlights === "function") {
+    refreshWatchlistHighlights();
+  }
 }
 
 function updatePaginationInfo() {
@@ -279,7 +282,8 @@ function addWatchlistButtonToDetail(show) {
   watchlistBtn.className = "btn btn--primary suggestion-watchlist-btn watchlist-btn";
   watchlistBtn.textContent = "Add to Watchlist";
   watchlistBtn.dataset.movieId = showId;
-  watchlistBtn.dataset.movieData = JSON.stringify(show);
+  const watchlistPayload = { ...show, mediaType: "series" };
+  watchlistBtn.dataset.movieData = JSON.stringify(watchlistPayload);
 
   seriesDetailActions.appendChild(watchlistBtn);
 

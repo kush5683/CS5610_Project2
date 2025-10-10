@@ -63,7 +63,8 @@ function addWatchlistButtonToSuggestion(movie) {
   watchlistBtn.className = 'btn btn--primary suggestion-watchlist-btn watchlist-btn';
   watchlistBtn.textContent = 'Add to Watchlist';
   watchlistBtn.dataset.movieId = movie.id;
-  watchlistBtn.dataset.movieData = JSON.stringify(movie);
+  const watchlistPayload = { ...movie, mediaType: 'movie' };
+  watchlistBtn.dataset.movieData = JSON.stringify(watchlistPayload);
 
   // Add button to the result container
   const resultContainer = document.getElementById("suggestionResult");
