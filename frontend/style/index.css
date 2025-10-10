@@ -20,211 +20,213 @@
   box-shadow: 0 12px 32px rgba(31, 200, 164, 0.28);
 }
 
-/* Container that reveals card results with a glass panel look */
-.suggestion-result {
-  margin-top: clamp(2rem, 5vw, 3rem);
-  align-items: center;
-  background: rgba(31, 200, 164, 0.15);
-  border-radius: 16px;
-  padding: clamp(0.75rem, 2vw, 1.25rem);
-  margin-bottom: clamp(3rem, 6vw, 4rem);
+/* Top Movies Carousel */
+.top-movies {
+  position: relative;
 }
 
-/* Base card styling shared by each suggestion tile */
-.suggestion-card {
+.top-movies__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.top-movies__header h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--nav-text);
+}
+
+.top-movies__controls {
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
+.carousel-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  padding: 0;
+}
+
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.top-movies__viewport {
+  overflow: hidden;
+  margin: 0 -0.75rem;
+  /* border: 1px solid rgba(255, 255, 255, 0.08); */
+  border-radius: 18px;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.top-movies__viewport::before,
+.top-movies__viewport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(1rem, 4vw, 2.75rem);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.top-movies__viewport::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(4, 18, 27, 0.84) 0%,
+    rgba(7, 26, 35, 0.55) 45%,
+    rgba(12, 40, 46, 0.18) 75%,
+    rgba(5, 9, 13, 0) 100%
+  );
+}
+
+.top-movies__viewport::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(29, 12, 6, 0.84) 0%,
+    rgba(37, 18, 10, 0.55) 45%,
+    rgba(48, 26, 16, 0.18) 75%,
+    rgba(5, 9, 13, 0) 100%
+  );
+}
+
+.top-movies__list {
+  --items-per-slide: 4;
+  --carousel-offset: 0%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  transform: translateX(var(--carousel-offset));
+  transition: transform 0.45s ease;
+}
+
+.top-movies__item {
+  flex: 0 0 calc(100% / var(--items-per-slide));
+  max-width: calc(100% / var(--items-per-slide));
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+}
+
+.top-movies__item--message {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.top-movies__message {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.25);
+  padding: 1.75rem;
+  text-align: center;
+  margin: 0;
+  color: var(--nav-text-muted);
+  font-size: 1rem;
+}
+
+.top-movie-card {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   height: 100%;
-  padding: clamp(1.5rem, 3vw, 2rem);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
-/* Highlight the poster column with a warm accent */
-.suggestion-card--poster {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(255, 77, 79, 0.08);
-  border: 2px solid rgba(255, 77, 79, 0.65);
+.top-movie-card--placeholder {
+  visibility: hidden;
+  pointer-events: none;
 }
 
-/* Poster placeholder that keeps a cinematic aspect ratio */
-.suggestion-card__poster {
+.top-movie-card:hover,
+.top-movie-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+}
+
+.top-movie-card__poster {
+  position: relative;
   width: 100%;
-  max-width: min(20rem, 100%);
   aspect-ratio: 2 / 3;
-  border-radius: 16px;
+  border-radius: 12px;
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #ff4d4f;
-  font-weight: 600;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
 }
 
-/* Stretch poster art to fill the frame cleanly */
-.suggestion-card__poster img {
+.top-movie-card__poster img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 16px;
 }
 
-/* Title card styled with a contrasting orange border */
-.suggestion-card--title {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border: 2px solid rgba(255, 138, 61, 0.65);
-  background: rgba(255, 138, 61, 0.12);
-  color: rgba(255, 230, 210, 0.9);
+.top-movie-card__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--nav-text);
 }
 
-/* Bold uppercase typography for the title */
-.suggestion-card__title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: inherit;
-}
-
-/* Secondary metadata styling below the title */
-.suggestion-card__meta {
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 230, 210, 0.75);
-}
-
-/* Comfortable reading size for the overview */
-.suggestion-card__description {
-  font-size: 0.95rem;
-  line-height: 1.7;
+.top-movie-card__meta {
+  margin: 0;
+  font-size: 0.85rem;
   color: var(--nav-text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-/* Space title and metadata apart within the header */
-.suggestion-card__header {
+.top-movies__pagination {
+  margin-top: 1.25rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-}
-
-/* Stack the title text vertically */
-.suggestion-card__primary {
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 0.6rem;
 }
 
-/* Align genres/tags toward the trailing edge */
-.suggestion-card__tags {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  align-items: flex-end;
+.top-movies__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-/* Description card framed with the teal accent */
-.suggestion-card--description {
-  display: flex;
-  flex-direction: column;
-  border: 2px solid rgba(31, 200, 164, 0.6);
-  background: rgba(31, 200, 164, 0.12);
-  color: rgba(244, 251, 248, 0.85);
+.top-movies__dot.is-active {
+  background: var(--accent);
+  transform: scale(1.15);
 }
 
-/* Keep description copy aligned with the top of the card */
-.suggestion-card--description .card-body {
-  display: flex;
-  align-items: flex-start;
-  flex: 1 1 auto;
+.top-movies__dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
-/* Two-column grid pairing the poster with copy */
-.suggestion-layout {
-  display: grid;
-  grid-template-columns: clamp(15rem, 32vw, 22.5rem) minmax(0, 1fr);
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 1.75rem;
-  align-items: stretch;
-}
-
-/* Let the poster span the full height of the grid */
-.suggestion-layout__poster {
-  grid-row: 1 / span 2;
-}
-
-/* Keep text-based cards aligned in the second column */
-.suggestion-layout__title,
-.suggestion-layout__description {
-  grid-column: 2 / -1;
-}
-
-/* Title row stays on top of the copy column */
-.suggestion-layout__title {
-  grid-row: 1;
-}
-
-/* Description card anchors the second row */
-.suggestion-layout__description {
-  grid-row: 2;
-}
-
-/* Providers card stretches under the description */
-.suggestion-layout__providers {
-  grid-column: span 2 / -1;
-  width: 100%;
-}
-
-/* Responsive grid that balances provider logos */
-.suggestion-card__providers-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
-  gap: clamp(0.75rem, 2vw, 1.25rem);
-  align-items: center;
-  justify-items: center;
-}
-
-/* Normalize provider logos to fit their grid cells */
-.suggestion-card__providers-list img {
-  height: 10rem;
-  object-fit: contain;
-}
-
-/* Scale the poster card down sooner on medium screens */
 @media (max-width: 48rem) {
-  .suggestion-card--poster .suggestion-card__poster {
-    max-width: min(16.25rem, 100%);
-  }
-}
-
-/* Collapse the layout to a single column on narrow viewports */
-@media (max-width: 60rem) {
-  .suggestion-layout {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-  }
-
-  .suggestion-layout__poster,
-  .suggestion-layout__title,
-  .suggestion-layout__description,
-  .suggestion-layout__providers {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  /* Switch tag chips into a row once the layout stacks */
-  .suggestion-card__tags {
-    flex-direction: row;
+  .top-movies__header {
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
-    gap: 0.45rem 0.75rem;
+    gap: 1rem;
+  }
+
+  .top-movies__controls {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

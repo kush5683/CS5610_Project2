@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/movie-detail.css">
   <link rel="stylesheet" href="style/index.css">
 </head>
 <body>
@@ -76,6 +77,22 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="top-movies section-spacing" aria-labelledby="topMoviesHeading">
+    <div class="container">
+      <div class="top-movies__header">
+        <h2 id="topMoviesHeading">Top Movies This Week</h2>
+        <div class="top-movies__controls" aria-label="Top movies carousel controls">
+          <button id="topMoviesPrev" class="btn btn--ghost carousel-btn" type="button" aria-label="Previous movies">&larr;</button>
+          <button id="topMoviesNext" class="btn btn--ghost carousel-btn" type="button" aria-label="Next movies">&rarr;</button>
+        </div>
+      </div>
+      <div class="top-movies__viewport">
+        <ul id="topMoviesCarousel" class="top-movies__list" aria-live="polite"></ul>
+      </div>
+      <div class="top-movies__pagination" role="tablist" aria-label="Carousel dot controls" id="topMoviesDots"></div>
     </div>
   </section>
   </main>

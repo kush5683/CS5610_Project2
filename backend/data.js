@@ -36,6 +36,47 @@ router.get("/get-random-movie", (req, res) => {
   }
 });
 
+router.get("/movies", (req, res) => {
+  try {
+    if (moviesData.length === 0) {
+      return res.status(500).json({ error: "No movies data available" });
+    }
+
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const pageSize = parseInt(req.query.pageSize, 10) || 50;
+    const validPageSizes = [50, 100, 250, 500];
+    const normalizedPageSize = validPageSizes.includes(pageSize) ? pageSize : 50;
+
+    const startIndex = (page - 1) * normalizedPageSize;
+
+    if (startIndex >= moviesData.length) {
+      return res.json({
+        page,
+        pageSize: normalizedPageSize,
+        totalMovies: moviesData.length,
+        totalPages: Math.ceil(moviesData.length / normalizedPageSize),
+        movies: [],
+      });
+    }
+
+    const pagedMovies = moviesData.slice(
+      startIndex,
+      startIndex + normalizedPageSize
+    );
+
+    res.json({
+      page,
+      pageSize: normalizedPageSize,
+      totalMovies: moviesData.length,
+      totalPages: Math.ceil(moviesData.length / normalizedPageSize),
+      movies: pagedMovies,
+    });
+  } catch (error) {
+    console.error("Error getting movies page:", error);
+    res.status(500).json({ error: "Failed to get movies" });
+  }
+});
+
 // User authentication routes using MongoDB
 router.post("/register-user", async (req, res) => {
   try {
