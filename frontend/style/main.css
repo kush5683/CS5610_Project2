@@ -238,6 +238,7 @@ main {
   backdrop-filter: blur(12px);
   color: var(--nav-text-muted);
   padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  margin-top: 1.5rem;
 }
 
 /* Center footer content and add breathing room */
@@ -491,6 +492,7 @@ main {
 
 .movie-detail__actions .watchlist-btn {
   min-width: 14rem;
+  padding: 0.65rem 1.2rem;
 }
 
 .movie-detail__signin-note {

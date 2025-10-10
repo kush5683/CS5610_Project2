@@ -20,6 +20,11 @@
   box-shadow: 0 12px 32px rgba(31, 200, 164, 0.28);
 }
 
+button.btn.btn--primary.suggestion-watchlist-btn.watchlist-btn
+ {
+    margin: 1.5rem;
+}
+
 /* Top Movies Carousel */
 .top-movies {
   position: relative;
@@ -82,24 +87,10 @@
 
 .top-movies__viewport::before {
   left: 0;
-  background: linear-gradient(
-    to right,
-    rgba(4, 18, 27, 0.84) 0%,
-    rgba(7, 26, 35, 0.55) 45%,
-    rgba(12, 40, 46, 0.18) 75%,
-    rgba(5, 9, 13, 0) 100%
-  );
 }
 
 .top-movies__viewport::after {
   right: 0;
-  background: linear-gradient(
-    to left,
-    rgba(29, 12, 6, 0.84) 0%,
-    rgba(37, 18, 10, 0.55) 45%,
-    rgba(48, 26, 16, 0.18) 75%,
-    rgba(5, 9, 13, 0) 100%
-  );
 }
 
 .top-movies__list {

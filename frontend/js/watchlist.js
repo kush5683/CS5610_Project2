@@ -22,7 +22,6 @@ async function addToWatchlist(movie) {
     const result = await response.json();
 
     if (response.ok && result.success) {
-      alert('Movie added to your watchlist!');
       console.log('Movie added to watchlist:', movie);
       
       updateWatchlistButton(movie.id, true);
