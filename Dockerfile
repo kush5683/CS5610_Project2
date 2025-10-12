@@ -8,6 +8,7 @@ RUN npm ci --omit=dev
 
 COPY backend backend
 COPY frontend frontend
+COPY submission-content submission-content
 COPY db db
 COPY movies.json tv_shows.json ./
 

@@ -16,7 +16,8 @@ const ENABLE_HTTP =
 console.log("Backend JS loaded successfully.");
 
 app.use(express.static("frontend"));
-app.use("/submission-content", express.static("submission-content"));
+const submissionContentDir = path.resolve("submission-content");
+app.use("/submission-content", express.static(submissionContentDir));
 app.use(express.json());
 app.use("/api", dataRoutes);
 
