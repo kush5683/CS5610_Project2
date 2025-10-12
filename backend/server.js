@@ -18,10 +18,6 @@ console.log("Backend JS loaded successfully.");
 app.use(express.static("frontend"));
 const submissionContentDir = path.resolve("submission-content");
 app.use("/submission-content", express.static(submissionContentDir));
-const docsDir = path.resolve("docs");
-if (fs.existsSync(docsDir)) {
-  app.use("/docs", express.static(docsDir));
-}
 app.use(express.json());
 app.use("/api", dataRoutes);
 
