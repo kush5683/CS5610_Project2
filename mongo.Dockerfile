@@ -1,5 +1,4 @@
-# syntax=docker/dockerfile:1
-
+# Use the default Docker builder.
 FROM mongo:7.0
 
 ENV MONGO_INITDB_DATABASE=WhatToWatch

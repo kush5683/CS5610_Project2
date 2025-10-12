@@ -1,5 +1,4 @@
-# syntax=docker/dockerfile:1
-
+# Use the default Docker builder.
 FROM node:20-alpine AS base
 
 WORKDIR /app
