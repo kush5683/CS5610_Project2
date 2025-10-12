@@ -7,6 +7,7 @@ services:
       dockerfile: mongo.Dockerfile
     container_name: what-to-watch-mongo
     restart: unless-stopped
+    user: "0:0"
     networks:
       - what-to-watch-net
     volumes:
@@ -25,10 +26,17 @@ services:
     environment:
       - MONGODB_URI=mongodb://mongo:27017/WhatToWatch
       - PORT=3000
+      - HTTPS_PORT=3443
+      - SSL_CERT_FILE=/certs/origin-cert.pem
+      - SSL_KEY_FILE=/certs/private-key.pem
+      - ENABLE_HTTP=false
     ports:
-      - "80:3000"
+      - "443:3443"
     networks:
       - what-to-watch-net
+    volumes:
+      - /etc/ssl/certs/origin-cert.pem:/certs/origin-cert.pem:ro
+      - /etc/ssl/private/private-key.pem:/certs/private-key.pem:ro
 
 networks:
   what-to-watch-net:
