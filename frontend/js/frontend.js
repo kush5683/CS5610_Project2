@@ -1,3 +1,5 @@
+import { getCurrentUser } from "./watchlist.js";
+
 console.log("Frontend JS loaded successfully.");
 
 const suggestionBtn = document.getElementById("generateSuggestionBtn");
@@ -69,12 +71,6 @@ function addWatchlistButtonToSuggestion(movie) {
   // Add button to the result container
   const resultContainer = document.getElementById("suggestionResult");
   resultContainer.appendChild(watchlistBtn);
-}
-
-// Get current user from localStorage
-function getCurrentUser() {
-  const userString = localStorage.getItem('user');
-  return userString ? JSON.parse(userString) : null;
 }
 
 // Top movies carousel setup

@@ -1,5 +1,5 @@
 // watchlist.js
-async function addToWatchlist(movie) {
+export async function addToWatchlist(movie) {
   const user = getCurrentUser();
   if (!user) {
     alert('Please sign in to add movies to your watchlist');
@@ -37,7 +37,7 @@ async function addToWatchlist(movie) {
   }
 }
 
-async function removeFromWatchlist(movieId) {
+export async function removeFromWatchlist(movieId) {
   const user = getCurrentUser();
   if (!user) {
     alert('Please sign in first');
@@ -72,7 +72,7 @@ async function removeFromWatchlist(movieId) {
   }
 }
 
-async function getUserWatchlist() {
+export async function getUserWatchlist() {
   const user = getCurrentUser();
   if (!user) {
     return [];
@@ -94,7 +94,7 @@ async function getUserWatchlist() {
   }
 }
 
-function updateWatchlistButton(movieId, isInWatchlist) {
+export function updateWatchlistButton(movieId, isInWatchlist) {
   const buttons = document.querySelectorAll(`.watchlist-btn[data-movie-id="${movieId}"]`);
 
   buttons.forEach(button => {
@@ -112,7 +112,7 @@ function updateWatchlistButton(movieId, isInWatchlist) {
   toggleWatchlistCardHighlight(movieId, isInWatchlist);
 }
 
-async function isMovieInWatchlist(movieId) {
+export async function isMovieInWatchlist(movieId) {
   const watchlist = await getUserWatchlist();
   return watchlist.some(movie => movie.id === movieId);
 }
@@ -600,7 +600,7 @@ function updateWatchlistCarousel({ immediate = false } = {}) {
   }
 }
 
-async function refreshWatchlistHighlights(providedWatchlist) {
+export async function refreshWatchlistHighlights(providedWatchlist) {
   if (typeof document === "undefined") {
     return;
   }
@@ -652,7 +652,7 @@ function calculateWatchlistItemsPerSlide() {
   return 3;
 }
 
-function normalizeWatchlistEntry(entry) {
+export function normalizeWatchlistEntry(entry) {
   if (!entry || typeof entry !== "object") {
     return entry;
   }
@@ -667,7 +667,7 @@ function normalizeWatchlistEntry(entry) {
   };
 }
 
-function deriveMediaType(entry) {
+export function deriveMediaType(entry) {
   const explicitType = entry.mediaType || entry.media_type || entry.type;
   if (typeof explicitType === "string") {
     const lowered = explicitType.toLowerCase();
@@ -699,22 +699,7 @@ function escapeHtmlValue(value) {
     .replace(/'/g, "&#39;");
 }
 
-function getCurrentUser() {
+export function getCurrentUser() {
   const userString = localStorage.getItem('user');
   return userString ? JSON.parse(userString) : null;
-}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    addToWatchlist,
-    removeFromWatchlist,
-    getUserWatchlist,
-    updateWatchlistButton,
-    isMovieInWatchlist,
-    displayWatchlist,
-    initializeWatchlistPage,
-    refreshWatchlistHighlights,
-    normalizeWatchlistEntry,
-    deriveMediaType
-  };
 }

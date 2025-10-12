@@ -1,3 +1,10 @@
+import {
+  getCurrentUser,
+  isMovieInWatchlist,
+  refreshWatchlistHighlights,
+  updateWatchlistButton,
+} from "./watchlist.js";
+
 const seriesGrid = document.getElementById("seriesGrid");
 const pageSizeSelect = document.getElementById("seriesPageSizeSelect");
 const paginationInfo = document.getElementById("seriesPaginationInfo");
@@ -16,7 +23,6 @@ let currentPage = 1;
 let totalPages = 1;
 let isLoading = false;
 let selectedSeriesCard = null;
-let isModalOpen = false;
 let pendingSelectedSeries = null;
 
 const storedSelectedSeriesRaw = (() => {
@@ -138,9 +144,7 @@ function renderSeries(series) {
 
   seriesGrid.appendChild(fragment);
   maybeShowPendingSeries();
-  if (typeof refreshWatchlistHighlights === "function") {
-    refreshWatchlistHighlights();
-  }
+  void refreshWatchlistHighlights();
 }
 
 function updatePaginationInfo() {
@@ -255,10 +259,6 @@ function addWatchlistButtonToDetail(show) {
 
   seriesDetailActions.innerHTML = "";
 
-  if (typeof getCurrentUser !== "function") {
-    return;
-  }
-
   const user = getCurrentUser();
   const showId = show?.id;
 
@@ -287,22 +287,19 @@ function addWatchlistButtonToDetail(show) {
 
   seriesDetailActions.appendChild(watchlistBtn);
 
-  if (typeof isMovieInWatchlist === "function" && typeof updateWatchlistButton === "function") {
-    isMovieInWatchlist(showId)
-      .then((isInWatchlist) => {
-        updateWatchlistButton(showId, isInWatchlist);
-      })
-      .catch((error) => {
-        console.error("Failed to check watchlist state:", error);
-      });
-  }
+  isMovieInWatchlist(showId)
+    .then((isInWatchlist) => {
+      updateWatchlistButton(showId, isInWatchlist);
+    })
+    .catch((error) => {
+      console.error("Failed to check watchlist state:", error);
+    });
 }
 
 function openSeriesModal() {
   if (!seriesModal?.classList.contains("is-open")) {
     seriesModal.classList.add("is-open");
     seriesModal.setAttribute("aria-hidden", "false");
-    isModalOpen = true;
     document.body?.classList.add("movie-modal-open");
     document.addEventListener("keydown", handleEscapeKey);
   }
@@ -312,7 +309,6 @@ function closeSeriesModal() {
   if (seriesModal?.classList.contains("is-open")) {
     seriesModal.classList.remove("is-open");
     seriesModal.setAttribute("aria-hidden", "true");
-    isModalOpen = false;
     document.body?.classList.remove("movie-modal-open");
     document.removeEventListener("keydown", handleEscapeKey);
   }

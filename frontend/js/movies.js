@@ -1,3 +1,10 @@
+import {
+  getCurrentUser,
+  isMovieInWatchlist,
+  refreshWatchlistHighlights,
+  updateWatchlistButton,
+} from "./watchlist.js";
+
 const moviesGrid = document.getElementById("moviesGrid");
 const pageSizeSelect = document.getElementById("pageSizeSelect");
 const paginationInfo = document.getElementById("paginationInfo");
@@ -138,9 +145,7 @@ function renderMovies(movies) {
 
   moviesGrid.appendChild(fragment);
   maybeShowPendingMovie();
-  if (typeof refreshWatchlistHighlights === "function") {
-    refreshWatchlistHighlights();
-  }
+  void refreshWatchlistHighlights();
 }
 
 // Keep the UI pagination summary, visibility, and button states in sync.
@@ -268,10 +273,6 @@ function addWatchlistButtonToDetail(movie) {
 
   movieDetailActions.innerHTML = "";
 
-  if (typeof getCurrentUser !== "function") {
-    return;
-  }
-
   const user = getCurrentUser();
   const movieId = movie?.id;
 
@@ -300,15 +301,13 @@ function addWatchlistButtonToDetail(movie) {
 
   movieDetailActions.appendChild(watchlistBtn);
 
-  if (typeof isMovieInWatchlist === "function" && typeof updateWatchlistButton === "function") {
-    isMovieInWatchlist(movieId)
-      .then((isInWatchlist) => {
-        updateWatchlistButton(movieId, isInWatchlist);
-      })
-      .catch((error) => {
-        console.error("Failed to check watchlist state:", error);
-      });
-  }
+  isMovieInWatchlist(movieId)
+    .then((isInWatchlist) => {
+      updateWatchlistButton(movieId, isInWatchlist);
+    })
+    .catch((error) => {
+      console.error("Failed to check watchlist state:", error);
+    });
 }
 
 function openMovieModal() {

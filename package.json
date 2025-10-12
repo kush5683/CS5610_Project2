@@ -20,14 +20,15 @@
   },
   "homepage": "https://github.com/kush5683/CS5610_Project2#readme",
   "devDependencies": {
+    "@eslint/css": "^0.13.0",
     "@eslint/js": "^9.37.0",
+    "@eslint/json": "^0.13.2",
+    "@eslint/markdown": "^7.4.0",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jest": "^29.0.1",
-    "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.4.0",
-    "jest": "^30.2.0",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.46.0"
   },
   "dependencies": {
     "express": "^5.1.0",
