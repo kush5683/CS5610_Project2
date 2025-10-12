@@ -2,7 +2,9 @@ import { MongoClient, ObjectId } from 'mongodb';
 
 export default function mongoDB({
     dbName = 'WhatToWatch',
-    collectionName = 'users',
+    userCollection = 'users',
+    movieCollection = 'Movies',
+    seriesCollection = 'Series',
     defaultUri = 'mongodb://localhost:27017/',
 } = {}) {
     const me = {};
@@ -13,9 +15,11 @@ export default function mongoDB({
         const client = new MongoClient(uri);
         await client.connect();
         const db = client.db(dbName);
-        const users = db.collection(collectionName);
+        const users = db.collection(userCollection);
+        const movies = db.collection(movieCollection);
+        const series = db.collection(seriesCollection);
         
-        return { client, db, users };
+        return { client, db, users, movies, series };
     };
 
     // get watchlist 
@@ -127,6 +131,87 @@ export default function mongoDB({
             throw error;
         }
     };
+
+    me.getRandomMovie = async() => {
+        try{
+            const { client, movies } = await connect();
+            const result = await  movies.aggregate([ { $sample: { size: 1 } } ]).toArray();
+            await client.close();
+            return result[0];
+        }
+        catch(error){
+            console.error('Error getting random movie:', error);
+            throw error;
+        }
+    }
+
+    me.getMoviePage = async(page = 1, pageSize = 50) => {
+        try{
+            const { client, movies } = await connect();
+            const parsedPage = parseInt(page, 10);
+            const parsedPageSize = parseInt(pageSize, 10);
+            const safePageSize = Number.isNaN(parsedPageSize) || parsedPageSize <= 0 ? 50 : parsedPageSize;
+            const safePage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
+
+            const totalMovies = await movies.countDocuments();
+            const totalPages = Math.ceil(totalMovies / safePageSize);
+            const validPage = totalPages === 0 ? 1 : Math.min(safePage, totalPages);
+            const skip = (validPage - 1) * safePageSize;
+
+            const moviePage = await movies.find({})
+                .skip(skip)
+                .limit(safePageSize)
+                .toArray();
+
+            await client.close();
+
+            return {
+                page: validPage,
+                pageSize: safePageSize,
+                totalMovies,
+                totalPages,
+                movies: moviePage
+            };
+        }
+        catch(error){
+            console.error('Error getting movie page:', error);
+            throw error;
+        }
+    }
+
+    me.getSeriesPage = async(page = 1, pageSize = 50) => {
+        try{
+            const { client, series } = await connect();
+            const parsedPage = parseInt(page, 10);
+            const parsedPageSize = parseInt(pageSize, 10);
+            const safePageSize = Number.isNaN(parsedPageSize) || parsedPageSize <= 0 ? 50 : parsedPageSize;
+            const safePage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
+
+            const totalSeries = await series.countDocuments();
+            const totalPages = Math.ceil(totalSeries / safePageSize);
+            const validPage = totalPages === 0 ? 1 : Math.min(safePage, totalPages);
+            const skip = (validPage - 1) * safePageSize;
+
+            const seriesPage = await series.find({})
+                .skip(skip)
+                .limit(safePageSize)
+                .toArray();
+
+            await client.close();
+
+            return {
+                page: validPage,
+                pageSize: safePageSize,
+                totalSeries,
+                totalPages,
+                series: seriesPage
+            };
+        }
+        catch(error){
+            console.error('Error getting series page:', error);
+            throw error;
+        }
+    }
 
     return me;
 } 

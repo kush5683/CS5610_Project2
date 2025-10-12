@@ -29,99 +29,44 @@ try {
 
 console.log("Data JS loaded successfully.");
 
-router.get("/get-random-movie", (req, res) => {
+router.get("/get-random-movie", async (_, res) => {
   try {
-    if (moviesData.length === 0) {
-      return res.status(500).json({ error: "No movies data available" });
-    }
+    console.log("Get random movie endpoint hit");
 
-    // Get a random movie from the array
-    const randomIndex = Math.floor(Math.random() * moviesData.length);
-    const randomMovie = moviesData[randomIndex];
-
-    res.json(randomMovie);
+    const randomSelection = await db.getRandomMovie();
+    console.log("Random movie selected:", randomSelection);
+    res.json(randomSelection);
   } catch (error) {
-    console.error('Error getting random movie:', error);
-    res.status(500).json({ error: "Failed to get random movie" });
-  }
-});
+    console.error("Get random move error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }});
 
-router.get("/movies", (req, res) => {
+router.get("/movies", async (req, res) => {
   try {
-    if (moviesData.length === 0) {
-      return res.status(500).json({ error: "No movies data available" });
-    }
+    console.log("Movies endpoint hit");
+    const page = req.query.page ?? 1;
+    const pageSize = req.query.pageSize ?? 50;
 
-    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
-    const pageSize = parseInt(req.query.pageSize, 10) || 50;
-    const validPageSizes = [50, 100, 250, 500];
-    const normalizedPageSize = validPageSizes.includes(pageSize) ? pageSize : 50;
+    const moviePage = await db.getMoviePage(page, pageSize);
+    console.log("Movies page response:", moviePage);
 
-    const startIndex = (page - 1) * normalizedPageSize;
-
-    if (startIndex >= moviesData.length) {
-      return res.json({
-        page,
-        pageSize: normalizedPageSize,
-        totalMovies: moviesData.length,
-        totalPages: Math.ceil(moviesData.length / normalizedPageSize),
-        movies: [],
-      });
-    }
-
-    const pagedMovies = moviesData.slice(
-      startIndex,
-      startIndex + normalizedPageSize
-    );
-
-    res.json({
-      page,
-      pageSize: normalizedPageSize,
-      totalMovies: moviesData.length,
-      totalPages: Math.ceil(moviesData.length / normalizedPageSize),
-      movies: pagedMovies,
-    });
+    res.json(moviePage);
   } catch (error) {
     console.error("Error getting movies page:", error);
     res.status(500).json({ error: "Failed to get movies" });
   }
 });
 
-router.get("/series", (req, res) => {
+router.get("/series", async (req, res) => {
   try {
-    if (seriesData.length === 0) {
-      return res.status(500).json({ error: "No series data available" });
-    }
+    console.log("Series endpoint hit");
+    const page = req.query.page ?? 1;
+    const pageSize = req.query.pageSize ?? 50;
 
-    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
-    const pageSize = parseInt(req.query.pageSize, 10) || 50;
-    const validPageSizes = [50, 100, 250, 500];
-    const normalizedPageSize = validPageSizes.includes(pageSize) ? pageSize : 50;
+    const seriesPage = await db.getSeriesPage(page, pageSize);
+    console.log("Series page response:", seriesPage);
 
-    const startIndex = (page - 1) * normalizedPageSize;
-
-    if (startIndex >= seriesData.length) {
-      return res.json({
-        page,
-        pageSize: normalizedPageSize,
-        totalSeries: seriesData.length,
-        totalPages: Math.ceil(seriesData.length / normalizedPageSize),
-        series: [],
-      });
-    }
-
-    const pagedSeries = seriesData.slice(
-      startIndex,
-      startIndex + normalizedPageSize
-    );
-
-    res.json({
-      page,
-      pageSize: normalizedPageSize,
-      totalSeries: seriesData.length,
-      totalPages: Math.ceil(seriesData.length / normalizedPageSize),
-      series: pagedSeries,
-    });
+    res.json(seriesPage);
   } catch (error) {
     console.error("Error getting series page:", error);
     res.status(500).json({ error: "Failed to get series" });
