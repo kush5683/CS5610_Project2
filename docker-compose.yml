@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  mongo:
+    build:
+      context: .
+      dockerfile: mongo.Dockerfile
+    container_name: what-to-watch-mongo
+    restart: unless-stopped
+    networks:
+      - what-to-watch-net
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: what-to-watch-app
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/WhatToWatch
+      - PORT=3000
+    ports:
+      - "80:3000"
+    networks:
+      - what-to-watch-net
+
+networks:
+  what-to-watch-net:
+    driver: bridge
+
+volumes:
+  mongo_data:

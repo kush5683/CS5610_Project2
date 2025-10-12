@@ -8,7 +8,7 @@ export default function mongoDB({
     defaultUri = 'mongodb://localhost:27017/',
 } = {}) {
     const me = {};
-    const uri = defaultUri;
+    const uri = process.env.MONGODB_URI || defaultUri;
 
     // Connect to MongoDB
     const connect = async () => {
