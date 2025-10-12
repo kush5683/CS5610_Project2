@@ -132,6 +132,7 @@ export default function mongoDB({
         }
     };
 
+    // Return a single random movie without loading the full collection.
     me.getRandomMovie = async() => {
         try{
             const { client, movies } = await connect();
@@ -145,6 +146,7 @@ export default function mongoDB({
         }
     }
 
+    // Fetch a paginated slice of movies with safe defaults for page inputs.
     me.getMoviePage = async(page = 1, pageSize = 50) => {
         try{
             const { client, movies } = await connect();
@@ -179,6 +181,7 @@ export default function mongoDB({
         }
     }
 
+    // Fetch a paginated slice of series documents using the same guards as movies.
     me.getSeriesPage = async(page = 1, pageSize = 50) => {
         try{
             const { client, series } = await connect();
