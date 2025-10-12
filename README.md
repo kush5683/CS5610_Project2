@@ -25,12 +25,7 @@ Full-stack movie discovery app built with Express, MongoDB, and a vanilla JavaSc
    ```bash
    npm install
    ```
-2. (Optional) Import the provided JSON datasets into MongoDB to populate the `Movies` and `Series` collections:
-   ```bash
-   mongoimport --uri "mongodb://localhost:27017/WhatToWatch" --collection Movies --jsonArray --file movies.json
-   mongoimport --uri "mongodb://localhost:27017/WhatToWatch" --collection Series --jsonArray --file tv_shows.json
-   ```
-3. Ensure MongoDB is running before starting the server.
+2. Ensure MongoDB is running before starting the server.
 
 ## Running the App
 - Start the development server (uses Nodemon for auto-reload):
@@ -59,7 +54,20 @@ All watchlist requests expect MongoDB ObjectId strings for `userId`; movies/seri
 - `backend/` – Express server & route handlers.
 - `frontend/` – Static assets, HTML pages, and client-side JS.
 - `db/` – Mongo helper module used by the API routes.
-- `movies.json`, `tv_shows.json` – Seed data exports for MongoDB.
+- `movies.json`, `tv_shows.json` - Seed data exports used by the API.
+- `db/WhatToWatch.*.json` - Full Mongo collections (Movies, Series, users) used when seeding a Docker-backed Mongo instance.
+
+## Docker Deployment
+1. Build and start the stack (Node + Mongo + persistent volume):
+   ```bash
+   docker compose up -d --build
+   ```
+
+2. The Mongo container seeds the `WhatToWatch` database on first run using the JSON exports in `db/WhatToWatch.*.json` (falls back to `movies.json` / `tv_shows.json` if the collection-specific files are missing). Existing data is preserved on subsequent restarts.
+
+3. The app container serves traffic over HTTPS only. Provide your certificate and key on the host at `/etc/ssl/certs/origin-cert.pem` and `/etc/ssl/private/private-key.pem` (or adjust `docker-compose.yml` to point at your paths) before starting the stack.
+
+4. Access the site at `https://<host>/`. MongoDB remains reachable on `127.0.0.1:27017` for admin tasks (e.g., `mongosh mongodb://127.0.0.1:27017/WhatToWatch`).
 
 ## Development Notes
 - Authentication is a basic email/password check stored in MongoDB; add hashing & validation before production use.

@@ -10,8 +10,33 @@ if [[ "${existing_docs}" != "0" ]]; then
   exit 0
 fi
 
-echo "Importing movies into ${DB_NAME}.Movies"
-mongoimport --db "$DB_NAME" --collection Movies --file /docker-entrypoint-initdb.d/movies.json --jsonArray --drop
+import_collection() {
+  local file_path="$1"
+  local collection="$2"
 
-echo "Importing series into ${DB_NAME}.Series"
-mongoimport --db "$DB_NAME" --collection Series --file /docker-entrypoint-initdb.d/tv_shows.json --jsonArray --drop
+  if [[ ! -f "$file_path" ]]; then
+    echo "Seed file ${file_path} not found. Skipping ${collection} import."
+    return
+  fi
+
+  echo "Importing ${collection} from $(basename "$file_path")"
+  mongoimport --db "$DB_NAME" --collection "$collection" --file "$file_path" --jsonArray --drop
+}
+
+MOVIES_FILE="/docker-entrypoint-initdb.d/WhatToWatch.Movies.json"
+SERIES_FILE="/docker-entrypoint-initdb.d/WhatToWatch.Series.json"
+USERS_FILE="/docker-entrypoint-initdb.d/WhatToWatch.users.json"
+
+if [[ ! -f "$MOVIES_FILE" ]]; then
+  MOVIES_FILE="/docker-entrypoint-initdb.d/movies.json"
+fi
+
+if [[ ! -f "$SERIES_FILE" ]]; then
+  SERIES_FILE="/docker-entrypoint-initdb.d/tv_shows.json"
+fi
+
+import_collection "$MOVIES_FILE" "Movies"
+import_collection "$SERIES_FILE" "Series"
+import_collection "$USERS_FILE" "users"
+
+echo "Mongo seed import complete."
