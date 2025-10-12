@@ -69,6 +69,11 @@ All watchlist requests expect MongoDB ObjectId strings for `userId`; movies/seri
 
 4. Access the site at `https://<host>/`. MongoDB remains reachable on `127.0.0.1:27017` for admin tasks (e.g., `mongosh mongodb://127.0.0.1:27017/WhatToWatch`).
 
+5. To rebuild/redeploy after code or seed changes:
+   ```bash
+   ./scripts/rebuild.sh
+   ```
+
 ## Development Notes
 - Authentication is a basic email/password check stored in MongoDB; add hashing & validation before production use.
 - Default MongoDB URI is hardcoded in `db/mongoDB.js`; adapt it or refactor to use environment variables as needed.
