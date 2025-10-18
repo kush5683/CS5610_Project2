@@ -1,19 +1,20 @@
 whatToWatch — Project 2 Proposal
-1) Summary
+
+1.  Summary
 
     whatToWatch helps users decide what to watch next by allowing them to build and manage personal watchlists, and receive quick, explainable recommendations. The app combines lightweight filtering, a random “Quick Pick” feature, and personalized mini-stats. Each team member owns complete vertical slices of the system—from database and API logic to the front-end interactions.
 
-2) Personas
+2.  Personas
 
     Busy Grad or Professional — wants a fast, low-effort way to pick something to watch.
 
     Curator — enjoys maintaining themed watchlists and sharing them with friends.
 
-3) Tech Stack
+3.  Tech Stack
 
     Node.js + Express for the backend, MongoDB for data storage, and HTML5/CSS/ES6 modules for the front end.
 
-4) Data Model (Initial)
+4.  Data Model (Initial)
 
     User: id, email, password hash
 
@@ -21,8 +22,7 @@ whatToWatch — Project 2 Proposal
 
     Watchlist: id, ownerId, name, items[{ titleId, addedAt, note? }]
 
-
-5) MVP Features
+5.  MVP Features
 
     User authentication
 
@@ -30,24 +30,22 @@ whatToWatch — Project 2 Proposal
 
     Multiple watchlists with add/remove functionality
 
-    Randomized recommendations 
+    Randomized recommendations
 
+6.  User Stories and Ownership
+    Phillip
 
-6) User Stories and Ownership
-Phillip
+        Auth & Session
 
-    Auth & Session
+            As a user, I can sign up, sign in, and sign out securely.
 
-        As a user, I can sign up, sign in, and sign out securely.
+            As a user, I can access only my own data once authenticated.
 
-        As a user, I can access only my own data once authenticated.
+        Search & Filter
 
-    Search & Filter
+            As a user, I can search for a movie or show by name.
 
-        As a user, I can search for a movie or show by name.
-
-        As a user, I can filter by providers.
-
+            As a user, I can filter by providers.
 
 Kush
 

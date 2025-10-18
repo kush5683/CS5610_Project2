@@ -14,8 +14,12 @@ const seriesModal = document.getElementById("seriesModal");
 const seriesModalClose = document.getElementById("seriesModalClose");
 const seriesDetailPoster = document.getElementById("seriesDetailPoster");
 const seriesDetailTitle = document.getElementById("seriesDetailTitle");
-const seriesDetailReleaseDate = document.getElementById("seriesDetailReleaseDate");
-const seriesDetailDescription = document.getElementById("seriesDetailDescription");
+const seriesDetailReleaseDate = document.getElementById(
+  "seriesDetailReleaseDate",
+);
+const seriesDetailDescription = document.getElementById(
+  "seriesDetailDescription",
+);
 const seriesDetailProviders = document.getElementById("seriesDetailProviders");
 const seriesDetailActions = document.getElementById("seriesDetailActions");
 
@@ -56,7 +60,9 @@ async function loadSeries() {
   toggleControls(true);
 
   try {
-    const response = await fetch(`/api/series?page=${currentPage}&pageSize=${pageSize}`);
+    const response = await fetch(
+      `/api/series?page=${currentPage}&pageSize=${pageSize}`,
+    );
 
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`);
@@ -107,7 +113,8 @@ function renderSeries(series) {
     card.className = "movie-card series-card";
     card.dataset.seriesId = show.id;
 
-    const posterUrl = show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+    const posterUrl =
+      show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
     const releaseYear = show.releaseYear || "N/A";
     const showTitle = show.title;
 
@@ -228,16 +235,19 @@ function showSeriesDetail(show) {
   }
 
   const showTitle = show.title;
-  const posterUrl = show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+  const posterUrl =
+    show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
 
   seriesDetailPoster.innerHTML = `<img src="${posterUrl}" alt="Poster for ${escapeHtml(showTitle)}" />`;
   seriesDetailTitle.textContent = showTitle;
   seriesDetailReleaseDate.textContent = show.releaseYear || "N/A";
-  seriesDetailDescription.textContent = show.overview || "No overview available.";
+  seriesDetailDescription.textContent =
+    show.overview || "No overview available.";
 
   seriesDetailProviders.innerHTML = "";
   if (Array.isArray(show.providers) && show.providers.length > 0) {
-    seriesDetailProviders.dataset.providerCount = show.providers.length > 10 ? "many" : String(show.providers.length);
+    seriesDetailProviders.dataset.providerCount =
+      show.providers.length > 10 ? "many" : String(show.providers.length);
     show.providers.forEach((provider) => {
       const providerImg = document.createElement("img");
       providerImg.src = provider.logo_path;
@@ -273,13 +283,15 @@ function addWatchlistButtonToDetail(show) {
   if (!showId) {
     const unavailable = document.createElement("p");
     unavailable.className = "movie-detail__signin-note";
-    unavailable.textContent = "Watchlist support requires a valid series identifier.";
+    unavailable.textContent =
+      "Watchlist support requires a valid series identifier.";
     seriesDetailActions.appendChild(unavailable);
     return;
   }
 
   const watchlistBtn = document.createElement("button");
-  watchlistBtn.className = "btn btn--primary suggestion-watchlist-btn watchlist-btn";
+  watchlistBtn.className =
+    "btn btn--primary suggestion-watchlist-btn watchlist-btn";
   watchlistBtn.textContent = "Add to Watchlist";
   watchlistBtn.dataset.movieId = showId;
   const watchlistPayload = { ...show, mediaType: "series" };
@@ -340,7 +352,7 @@ function maybeShowPendingSeries() {
   }
 
   const matchingCard = seriesGrid?.querySelector(
-    `.series-card[data-series-id="${targetId}"]`
+    `.series-card[data-series-id="${targetId}"]`,
   );
 
   if (matchingCard) {
@@ -367,8 +379,8 @@ function normalizeSeries(rawSeries) {
   const releaseYear = rawSeries.first_air_date
     ? rawSeries.first_air_date.split("-")[0]
     : rawSeries.release_date
-    ? rawSeries.release_date.split("-")[0]
-    : "N/A";
+      ? rawSeries.release_date.split("-")[0]
+      : "N/A";
 
   return {
     ...rawSeries,

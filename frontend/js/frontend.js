@@ -19,7 +19,7 @@ suggestionBtn?.addEventListener("click", async () => {
     let suggestion = await fetch("/api/get-random-movie").then((response) =>
       response.json(),
     );
-    
+
     resultPoster.innerHTML = `<img src="${suggestion.poster_path}" alt="Poster Image" />`;
     resultTitle.textContent = suggestion.title;
     resultReleaseDate.textContent = suggestion.release_date.split("-")[0];
@@ -55,17 +55,18 @@ function addWatchlistButtonToSuggestion(movie) {
   if (!user) return; // Don't show button if not logged in
 
   // Remove existing watchlist button
-  const existingBtn = document.querySelector('.suggestion-watchlist-btn');
+  const existingBtn = document.querySelector(".suggestion-watchlist-btn");
   if (existingBtn) {
     existingBtn.remove();
   }
 
   // Create watchlist button
-  const watchlistBtn = document.createElement('button');
-  watchlistBtn.className = 'btn btn--primary suggestion-watchlist-btn watchlist-btn';
-  watchlistBtn.textContent = 'Add to Watchlist';
+  const watchlistBtn = document.createElement("button");
+  watchlistBtn.className =
+    "btn btn--primary suggestion-watchlist-btn watchlist-btn";
+  watchlistBtn.textContent = "Add to Watchlist";
   watchlistBtn.dataset.movieId = movie.id;
-  const watchlistPayload = { ...movie, mediaType: 'movie' };
+  const watchlistPayload = { ...movie, mediaType: "movie" };
   watchlistBtn.dataset.movieData = JSON.stringify(watchlistPayload);
 
   // Add button to the result container
@@ -132,7 +133,10 @@ function prepareTopMoviesExtendedData({ preserveSlide = false } = {}) {
   if (!preserveSlide) {
     topMoviesState.currentSlide = 0;
   } else if (baseSlides > 0) {
-    topMoviesState.currentSlide = Math.min(topMoviesState.currentSlide, baseSlides - 1);
+    topMoviesState.currentSlide = Math.min(
+      topMoviesState.currentSlide,
+      baseSlides - 1,
+    );
   } else {
     topMoviesState.currentSlide = 0;
   }
@@ -172,7 +176,10 @@ function initializeTopMoviesCarousel() {
   topMoviesNext?.setAttribute("disabled", "true");
   loadTopMoviesCarousel();
 
-  topMoviesCarousel?.addEventListener("transitionend", handleTopMoviesTransitionEnd);
+  topMoviesCarousel?.addEventListener(
+    "transitionend",
+    handleTopMoviesTransitionEnd,
+  );
   topMoviesPrev?.addEventListener("click", () => moveTopMoviesSlide(-1));
   topMoviesNext?.addEventListener("click", () => moveTopMoviesSlide(1));
   topMoviesDots?.addEventListener("click", handleTopMoviesDotClick);
@@ -223,13 +230,12 @@ function renderTopMovies() {
       return;
     }
 
-    const posterUrl = movie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+    const posterUrl =
+      movie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
     const title = escapeHtml(movie.title || "Untitled Movie");
     const releaseYear = movie.release_date
       ? escapeHtml(movie.release_date.split("-")[0])
       : "N/A";
-    const ratingValue = Number(movie.vote_average);
-    const rating = Number.isFinite(ratingValue) ? ratingValue.toFixed(1) : "N/A";
 
     item.innerHTML = `
       <article class="top-movie-card">
@@ -265,7 +271,10 @@ function renderTopMoviesDots() {
     dot.className = "top-movies__dot";
     dot.dataset.slideIndex = String(i);
     dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
-    dot.setAttribute("aria-selected", i === topMoviesState.currentSlide ? "true" : "false");
+    dot.setAttribute(
+      "aria-selected",
+      i === topMoviesState.currentSlide ? "true" : "false",
+    );
     topMoviesDots.appendChild(dot);
   }
 }
@@ -297,7 +306,7 @@ function moveTopMoviesSlide(direction) {
   topMoviesState.visualIndex += direction;
 
   const normalized =
-    ((topMoviesState.visualIndex - 1) % slideCount + slideCount) % slideCount;
+    (((topMoviesState.visualIndex - 1) % slideCount) + slideCount) % slideCount;
   topMoviesState.currentSlide = normalized;
 
   updateTopMoviesCarousel();
@@ -311,7 +320,9 @@ function handleTopMoviesDotClick(event) {
   if (!Number.isNaN(index) && slideCount > 0) {
     topMoviesState.currentSlide = Math.min(index, slideCount - 1);
     topMoviesState.visualIndex =
-      slideCount > 1 ? topMoviesState.currentSlide + 1 : topMoviesState.currentSlide;
+      slideCount > 1
+        ? topMoviesState.currentSlide + 1
+        : topMoviesState.currentSlide;
     updateTopMoviesCarousel();
   }
 }
@@ -334,7 +345,7 @@ function handleTopMoviesResize() {
 function applyTopMoviesLayout() {
   topMoviesCarousel?.style.setProperty(
     "--items-per-slide",
-    String(topMoviesState.itemsPerSlide)
+    String(topMoviesState.itemsPerSlide),
   );
 }
 
@@ -360,18 +371,19 @@ function updateTopMoviesCarousel({ immediate = false } = {}) {
   if (slideCount > 0) {
     topMoviesState.currentSlide = Math.max(
       Math.min(topMoviesState.currentSlide, slideCount - 1),
-      0
+      0,
     );
   } else {
     topMoviesState.currentSlide = 0;
   }
 
-  const usesLooping = slideCount > 1 && topMoviesState.extendedMovies.length > 0;
+  const usesLooping =
+    slideCount > 1 && topMoviesState.extendedMovies.length > 0;
 
   if (usesLooping) {
     topMoviesState.visualIndex = Math.max(
       Math.min(topMoviesState.visualIndex, slideCount + 1),
-      0
+      0,
     );
   } else {
     topMoviesState.visualIndex = topMoviesState.currentSlide;
@@ -389,7 +401,7 @@ function updateTopMoviesCarousel({ immediate = false } = {}) {
     const setOffset = () => {
       topMoviesCarousel.style.setProperty(
         "--carousel-offset",
-        `-${offsetIndex * 100}%`
+        `-${offsetIndex * 100}%`,
       );
 
       if (immediate) {
@@ -468,7 +480,10 @@ function prepareTopSeriesExtendedData({ preserveSlide = false } = {}) {
   if (!preserveSlide) {
     topSeriesState.currentSlide = 0;
   } else if (baseSlides > 0) {
-    topSeriesState.currentSlide = Math.min(topSeriesState.currentSlide, baseSlides - 1);
+    topSeriesState.currentSlide = Math.min(
+      topSeriesState.currentSlide,
+      baseSlides - 1,
+    );
   } else {
     topSeriesState.currentSlide = 0;
   }
@@ -493,7 +508,11 @@ function prepareTopSeriesExtendedData({ preserveSlide = false } = {}) {
   const headSlide = slides[0].slice();
   const tailSlide = slides[slides.length - 1].slice();
 
-  topSeriesState.extendedSeries = [...tailSlide, ...slides.flat(), ...headSlide];
+  topSeriesState.extendedSeries = [
+    ...tailSlide,
+    ...slides.flat(),
+    ...headSlide,
+  ];
   topSeriesState.visualIndex = topSeriesState.currentSlide + 1;
 }
 
@@ -502,7 +521,10 @@ function initializeTopSeriesCarousel() {
   applyTopSeriesLayout();
   loadTopSeriesCarousel();
 
-  topSeriesCarousel?.addEventListener("transitionend", handleTopSeriesTransitionEnd);
+  topSeriesCarousel?.addEventListener(
+    "transitionend",
+    handleTopSeriesTransitionEnd,
+  );
   topSeriesPrev?.addEventListener("click", () => moveTopSeriesSlide(-1));
   topSeriesNext?.addEventListener("click", () => moveTopSeriesSlide(1));
   topSeriesDots?.addEventListener("click", handleTopSeriesDotClick);
@@ -530,7 +552,11 @@ async function loadTopSeriesCarousel() {
       return;
     }
 
-    renderTopSeries(topSeriesState.extendedSeries.length ? topSeriesState.extendedSeries : topSeriesState.series);
+    renderTopSeries(
+      topSeriesState.extendedSeries.length
+        ? topSeriesState.extendedSeries
+        : topSeriesState.series,
+    );
     updateTopSeriesCarousel({ immediate: true });
   } catch (error) {
     console.error("Error loading top series:", error);
@@ -559,11 +585,14 @@ function renderTopSeries(seriesItems) {
       return;
     }
 
-    const posterUrl = show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+    const posterUrl =
+      show.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
     const title = escapeHtml(show.title || "Untitled Series");
     const releaseYear = escapeHtml(show.releaseYear || "N/A");
     const ratingValue = Number(show.vote_average);
-    const rating = Number.isFinite(ratingValue) ? ratingValue.toFixed(1) : "N/A";
+    const rating = Number.isFinite(ratingValue)
+      ? ratingValue.toFixed(1)
+      : "N/A";
 
     item.innerHTML = `
       <article class="top-movie-card">
@@ -600,7 +629,10 @@ function renderTopSeriesDots() {
     dot.className = "top-movies__dot";
     dot.dataset.slideIndex = String(i);
     dot.setAttribute("aria-label", `Go to series slide ${i + 1}`);
-    dot.setAttribute("aria-selected", i === topSeriesState.currentSlide ? "true" : "false");
+    dot.setAttribute(
+      "aria-selected",
+      i === topSeriesState.currentSlide ? "true" : "false",
+    );
     topSeriesDots.appendChild(dot);
   }
 }
@@ -632,7 +664,7 @@ function moveTopSeriesSlide(direction) {
   topSeriesState.visualIndex += direction;
 
   const normalized =
-    ((topSeriesState.visualIndex - 1) % slideCount + slideCount) % slideCount;
+    (((topSeriesState.visualIndex - 1) % slideCount) + slideCount) % slideCount;
   topSeriesState.currentSlide = normalized;
 
   updateTopSeriesCarousel();
@@ -646,7 +678,9 @@ function handleTopSeriesDotClick(event) {
   if (!Number.isNaN(index) && slideCount > 0) {
     topSeriesState.currentSlide = Math.min(index, slideCount - 1);
     topSeriesState.visualIndex =
-      slideCount > 1 ? topSeriesState.currentSlide + 1 : topSeriesState.currentSlide;
+      slideCount > 1
+        ? topSeriesState.currentSlide + 1
+        : topSeriesState.currentSlide;
     updateTopSeriesCarousel();
   }
 }
@@ -661,7 +695,11 @@ function handleTopSeriesResize() {
       return;
     }
     prepareTopSeriesExtendedData({ preserveSlide: true });
-    renderTopSeries(topSeriesState.extendedSeries.length ? topSeriesState.extendedSeries : topSeriesState.series);
+    renderTopSeries(
+      topSeriesState.extendedSeries.length
+        ? topSeriesState.extendedSeries
+        : topSeriesState.series,
+    );
     updateTopSeriesCarousel({ immediate: true });
   }
 }
@@ -669,7 +707,7 @@ function handleTopSeriesResize() {
 function applyTopSeriesLayout() {
   topSeriesCarousel?.style.setProperty(
     "--items-per-slide",
-    String(topSeriesState.itemsPerSlide)
+    String(topSeriesState.itemsPerSlide),
   );
 }
 
@@ -695,18 +733,19 @@ function updateTopSeriesCarousel({ immediate = false } = {}) {
   if (slideCount > 0) {
     topSeriesState.currentSlide = Math.max(
       Math.min(topSeriesState.currentSlide, slideCount - 1),
-      0
+      0,
     );
   } else {
     topSeriesState.currentSlide = 0;
   }
 
-  const usesLooping = slideCount > 1 && topSeriesState.extendedSeries.length > 0;
+  const usesLooping =
+    slideCount > 1 && topSeriesState.extendedSeries.length > 0;
 
   if (usesLooping) {
     topSeriesState.visualIndex = Math.max(
       Math.min(topSeriesState.visualIndex, slideCount + 1),
-      0
+      0,
     );
   } else {
     topSeriesState.visualIndex = topSeriesState.currentSlide;
@@ -724,7 +763,7 @@ function updateTopSeriesCarousel({ immediate = false } = {}) {
     const setOffset = () => {
       topSeriesCarousel.style.setProperty(
         "--carousel-offset",
-        `-${offsetIndex * 100}%`
+        `-${offsetIndex * 100}%`,
       );
 
       if (immediate) {
@@ -784,8 +823,8 @@ function normalizeSeriesForCarousel(rawSeries) {
   const releaseYear = rawSeries.first_air_date
     ? rawSeries.first_air_date.split("-")[0]
     : rawSeries.release_date
-    ? rawSeries.release_date.split("-")[0]
-    : "N/A";
+      ? rawSeries.release_date.split("-")[0]
+      : "N/A";
 
   return {
     ...rawSeries,

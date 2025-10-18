@@ -1,72 +1,118 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Watchlist — What To Watch</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style/main.css">
-  <link rel="stylesheet" href="style/index.css">
-</head>
-<body>
-  <header class="wtw-nav">
-    <div class="wtw-nav__inner">
-      <a class="wtw-nav__brand" href="index.html"><span class="brand-icon">🎬</span>What To Watch</a>
-      <nav class="wtw-nav__primary" aria-label="Primary navigation">
-        <ul class="wtw-nav__links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="movies.html">Movies</a></li>
-          <li><a href="series.html">Series</a></li>
-          <li><a class="active" aria-current="page" href="watchlist.html">Watchlist</a></li>
-        </ul>
-      </nav>
-      <div class="wtw-nav__actions">
-        <a class="btn btn--ghost" href="sign-in.html">Sign In</a>
-        <a class="btn btn--primary" href="get-started.html">Get Started</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Watchlist — What To Watch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="style/index.css" />
+  </head>
+  <body>
+    <header class="wtw-nav">
+      <div class="wtw-nav__inner">
+        <a class="wtw-nav__brand" href="index.html"
+          ><span class="brand-icon">🎬</span>What To Watch</a
+        >
+        <nav class="wtw-nav__primary" aria-label="Primary navigation">
+          <ul class="wtw-nav__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="movies.html">Movies</a></li>
+            <li><a href="series.html">Series</a></li>
+            <li>
+              <a class="active" aria-current="page" href="watchlist.html"
+                >Watchlist</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="wtw-nav__actions">
+          <a class="btn btn--ghost" href="sign-in.html">Sign In</a>
+          <a class="btn btn--primary" href="get-started.html">Get Started</a>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="page-placeholder">
-    <section class="top-movies section-spacing watchlist-section" aria-labelledby="watchlistHeading">
-      <div class="container">
-        <div class="top-movies__header">
-          <div class="watchlist-header">
-            <h1 id="watchlistHeading">My Watchlist</h1>
-            <p class="watchlist-subtitle">Movies you've saved to watch later</p>
+    <main class="page-placeholder">
+      <section
+        class="top-movies section-spacing watchlist-section"
+        aria-labelledby="watchlistHeading"
+      >
+        <div class="container">
+          <div class="top-movies__header">
+            <div class="watchlist-header">
+              <h1 id="watchlistHeading">My Watchlist</h1>
+              <p class="watchlist-subtitle">
+                Movies you've saved to watch later
+              </p>
+            </div>
+            <div
+              class="top-movies__controls"
+              id="watchlistControls"
+              aria-label="Watchlist carousel controls"
+            >
+              <button
+                id="watchlistPrev"
+                class="btn btn--ghost carousel-btn"
+                type="button"
+                aria-label="Previous watchlist title"
+              >
+                &larr;
+              </button>
+              <button
+                id="watchlistNext"
+                class="btn btn--ghost carousel-btn"
+                type="button"
+                aria-label="Next watchlist title"
+              >
+                &rarr;
+              </button>
+            </div>
           </div>
-          <div class="top-movies__controls" id="watchlistControls" aria-label="Watchlist carousel controls">
-            <button id="watchlistPrev" class="btn btn--ghost carousel-btn" type="button" aria-label="Previous watchlist title">&larr;</button>
-            <button id="watchlistNext" class="btn btn--ghost carousel-btn" type="button" aria-label="Next watchlist title">&rarr;</button>
+
+          <div id="watchlistLoading" class="text-center" hidden>
+            <p>Loading your watchlist...</p>
           </div>
+
+          <div id="watchlistEmpty" class="text-center" hidden>
+            <h3>Your watchlist is empty</h3>
+            <p>
+              Start adding movies from our
+              <a href="index.html">recommendations</a>!
+            </p>
+          </div>
+
+          <div id="watchlistNotLoggedIn" class="text-center" hidden>
+            <h3>Please sign in to view your watchlist</h3>
+            <a href="sign-in.html" class="btn btn--primary">Sign In</a>
+          </div>
+
+          <div class="top-movies__viewport" id="watchlistViewport" hidden>
+            <ul
+              id="watchlistCarousel"
+              class="top-movies__list watchlist-carousel"
+              aria-live="polite"
+            ></ul>
+          </div>
+
+          <div
+            class="top-movies__pagination"
+            role="tablist"
+            aria-label="Watchlist carousel dot controls"
+            id="watchlistDots"
+            hidden
+          ></div>
         </div>
+      </section>
+    </main>
 
-        <div id="watchlistLoading" class="text-center" hidden>
-          <p>Loading your watchlist...</p>
-        </div>
-
-        <div id="watchlistEmpty" class="text-center" hidden>
-          <h3>Your watchlist is empty</h3>
-          <p>Start adding movies from our <a href="index.html">recommendations</a>!</p>
-        </div>
-
-        <div id="watchlistNotLoggedIn" class="text-center" hidden>
-          <h3>Please sign in to view your watchlist</h3>
-          <a href="sign-in.html" class="btn btn--primary">Sign In</a>
-        </div>
-
-        <div class="top-movies__viewport" id="watchlistViewport" hidden>
-          <ul id="watchlistCarousel" class="top-movies__list watchlist-carousel" aria-live="polite"></ul>
-        </div>
-
-        <div class="top-movies__pagination" role="tablist" aria-label="Watchlist carousel dot controls" id="watchlistDots" hidden></div>
-      </div>
-    </section>
-  </main>
-
-  <script src="js/auth.js"></script>
-  <script type="module" src="js/watchlist.js"></script>
-</body>
+    <script src="js/auth.js"></script>
+    <script type="module" src="js/watchlist.js"></script>
+  </body>
 </html>

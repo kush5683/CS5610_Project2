@@ -14,8 +14,12 @@ const movieModal = document.getElementById("movieModal");
 const movieModalClose = document.getElementById("movieModalClose");
 const movieDetailPoster = document.getElementById("movieDetailPoster");
 const movieDetailTitle = document.getElementById("movieDetailTitle");
-const movieDetailReleaseDate = document.getElementById("movieDetailReleaseDate");
-const movieDetailDescription = document.getElementById("movieDetailDescription");
+const movieDetailReleaseDate = document.getElementById(
+  "movieDetailReleaseDate",
+);
+const movieDetailDescription = document.getElementById(
+  "movieDetailDescription",
+);
 const movieDetailProviders = document.getElementById("movieDetailProviders");
 const movieDetailActions = document.getElementById("movieDetailActions");
 
@@ -23,7 +27,6 @@ let currentPage = 1;
 let totalPages = 1;
 let isLoading = false;
 let selectedMovieCard = null;
-let isModalOpen = false;
 let pendingSelectedMovie = null;
 
 const storedSelectedMovieRaw = (() => {
@@ -58,7 +61,9 @@ async function loadMovies() {
   toggleControls(true);
 
   try {
-    const response = await fetch(`/api/movies?page=${currentPage}&pageSize=${pageSize}`);
+    const response = await fetch(
+      `/api/movies?page=${currentPage}&pageSize=${pageSize}`,
+    );
 
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`);
@@ -108,8 +113,11 @@ function renderMovies(movies) {
     card.className = "movie-card";
     card.dataset.movieId = movie.id;
 
-    const posterUrl = movie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
-    const releaseYear = movie.release_date ? movie.release_date.split("-")[0] : "N/A";
+    const posterUrl =
+      movie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+    const releaseYear = movie.release_date
+      ? movie.release_date.split("-")[0]
+      : "N/A";
     const movieTitle = movie.title || "Untitled Movie";
 
     card.innerHTML = `
@@ -238,12 +246,16 @@ function showMovieDetail(movie) {
   }
 
   const movieTitle = movie.title || "Untitled Movie";
-  const posterUrl = movie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
+  const posterUrl =
+    movie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster";
 
   movieDetailPoster.innerHTML = `<img src="${posterUrl}" alt="Poster for ${escapeHtml(movieTitle)}" />`;
   movieDetailTitle.textContent = movieTitle;
-  movieDetailReleaseDate.textContent = movie.release_date ? movie.release_date.split("-")[0] : "N/A";
-  movieDetailDescription.textContent = movie.overview || "No overview available.";
+  movieDetailReleaseDate.textContent = movie.release_date
+    ? movie.release_date.split("-")[0]
+    : "N/A";
+  movieDetailDescription.textContent =
+    movie.overview || "No overview available.";
 
   movieDetailProviders.innerHTML = "";
   if (Array.isArray(movie.providers) && movie.providers.length > 0) {
@@ -287,13 +299,15 @@ function addWatchlistButtonToDetail(movie) {
   if (!movieId) {
     const unavailable = document.createElement("p");
     unavailable.className = "movie-detail__signin-note";
-    unavailable.textContent = "Watchlist support requires a valid movie identifier.";
+    unavailable.textContent =
+      "Watchlist support requires a valid movie identifier.";
     movieDetailActions.appendChild(unavailable);
     return;
   }
 
   const watchlistBtn = document.createElement("button");
-  watchlistBtn.className = "btn btn--primary suggestion-watchlist-btn watchlist-btn";
+  watchlistBtn.className =
+    "btn btn--primary suggestion-watchlist-btn watchlist-btn";
   watchlistBtn.textContent = "Add to Watchlist";
   watchlistBtn.dataset.movieId = movieId;
   const watchlistPayload = { ...movie, mediaType: "movie" };
@@ -314,7 +328,6 @@ function openMovieModal() {
   if (!movieModal?.classList.contains("is-open")) {
     movieModal.classList.add("is-open");
     movieModal.setAttribute("aria-hidden", "false");
-    isModalOpen = true;
     document.body?.classList.add("movie-modal-open");
     document.addEventListener("keydown", handleEscapeKey);
   }
@@ -324,7 +337,6 @@ function closeMovieModal() {
   if (movieModal?.classList.contains("is-open")) {
     movieModal.classList.remove("is-open");
     movieModal.setAttribute("aria-hidden", "true");
-    isModalOpen = false;
     document.body?.classList.remove("movie-modal-open");
     document.removeEventListener("keydown", handleEscapeKey);
   }
@@ -356,7 +368,7 @@ function maybeShowPendingMovie() {
   }
 
   const matchingCard = moviesGrid?.querySelector(
-    `.movie-card[data-movie-id="${targetId}"]`
+    `.movie-card[data-movie-id="${targetId}"]`,
   );
 
   if (matchingCard) {

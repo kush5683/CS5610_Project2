@@ -2,73 +2,73 @@
 export async function addToWatchlist(movie) {
   const user = getCurrentUser();
   if (!user) {
-    alert('Please sign in to add movies to your watchlist');
-    window.location.href = 'sign-in.html';
+    alert("Please sign in to add movies to your watchlist");
+    window.location.href = "sign-in.html";
     return;
   }
 
   try {
-    const response = await fetch('/api/add-to-user-watchlist', {
-      method: 'POST',
+    const response = await fetch("/api/add-to-user-watchlist", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 
-        userId: user.id, 
-        movie: movie 
-      })
+      body: JSON.stringify({
+        userId: user.id,
+        movie: movie,
+      }),
     });
 
     const result = await response.json();
 
     if (response.ok && result.success) {
-      console.log('Movie added to watchlist:', movie);
-      
+      console.log("Movie added to watchlist:", movie);
+
       updateWatchlistButton(movie.id, true);
-      
-      if (window.location.pathname.includes('watchlist.html')) {
+
+      if (window.location.pathname.includes("watchlist.html")) {
         await displayWatchlist();
       }
     } else {
-      alert(result.error || 'Failed to add movie to watchlist');
+      alert(result.error || "Failed to add movie to watchlist");
     }
   } catch (error) {
-    console.error('Add to watchlist error:', error);
+    console.error("Add to watchlist error:", error);
   }
 }
 
 export async function removeFromWatchlist(movieId) {
   const user = getCurrentUser();
   if (!user) {
-    alert('Please sign in first');
+    alert("Please sign in first");
     return;
   }
 
   try {
-    const response = await fetch('/api/remove-from-user-watchlist', {
-      method: 'DELETE',
+    const response = await fetch("/api/remove-from-user-watchlist", {
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 
-        userId: user.id, 
-        movieId: movieId 
-      })
+      body: JSON.stringify({
+        userId: user.id,
+        movieId: movieId,
+      }),
     });
 
     const result = await response.json();
 
     if (response.ok && result.success) {
-      console.log('Movie removed from watchlist:', movieId);
+      console.log("Movie removed from watchlist:", movieId);
       updateWatchlistButton(movieId, false);
-      if (window.location.pathname.includes('watchlist.html')) {
+      if (window.location.pathname.includes("watchlist.html")) {
         await displayWatchlist();
       }
     } else {
-      console.error('Failed to remove from watchlist:', result.error);
+      console.error("Failed to remove from watchlist:", result.error);
     }
   } catch (error) {
-    console.error('Remove from watchlist error:', error);
+    console.error("Remove from watchlist error:", error);
   }
 }
 
@@ -81,31 +81,33 @@ export async function getUserWatchlist() {
   try {
     const response = await fetch(`/api/get-user-watchlist?userId=${user.id}`);
     const watchlist = await response.json();
-    
+
     if (response.ok) {
       return watchlist;
     } else {
-      console.error('Failed to get watchlist:', watchlist.error);
+      console.error("Failed to get watchlist:", watchlist.error);
       return [];
     }
   } catch (error) {
-    console.error('Get watchlist error:', error);
+    console.error("Get watchlist error:", error);
     return [];
   }
 }
 
 export function updateWatchlistButton(movieId, isInWatchlist) {
-  const buttons = document.querySelectorAll(`.watchlist-btn[data-movie-id="${movieId}"]`);
+  const buttons = document.querySelectorAll(
+    `.watchlist-btn[data-movie-id="${movieId}"]`,
+  );
 
-  buttons.forEach(button => {
+  buttons.forEach((button) => {
     if (isInWatchlist) {
-      button.textContent = 'Remove from Watchlist';
-      button.classList.add('btn--danger');
-      button.classList.remove('btn--primary');
+      button.textContent = "Remove from Watchlist";
+      button.classList.add("btn--danger");
+      button.classList.remove("btn--primary");
     } else {
-      button.textContent = 'Add to Watchlist';
-      button.classList.add('btn--primary');
-      button.classList.remove('btn--danger');
+      button.textContent = "Add to Watchlist";
+      button.classList.add("btn--primary");
+      button.classList.remove("btn--danger");
     }
   });
 
@@ -114,15 +116,15 @@ export function updateWatchlistButton(movieId, isInWatchlist) {
 
 export async function isMovieInWatchlist(movieId) {
   const watchlist = await getUserWatchlist();
-  return watchlist.some(movie => movie.id === movieId);
+  return watchlist.some((movie) => movie.id === movieId);
 }
 
-const watchlistCarousel = document.getElementById('watchlistCarousel');
-const watchlistPrev = document.getElementById('watchlistPrev');
-const watchlistNext = document.getElementById('watchlistNext');
-const watchlistDots = document.getElementById('watchlistDots');
-const watchlistControls = document.getElementById('watchlistControls');
-const watchlistViewport = document.getElementById('watchlistViewport');
+const watchlistCarousel = document.getElementById("watchlistCarousel");
+const watchlistPrev = document.getElementById("watchlistPrev");
+const watchlistNext = document.getElementById("watchlistNext");
+const watchlistDots = document.getElementById("watchlistDots");
+const watchlistControls = document.getElementById("watchlistControls");
+const watchlistViewport = document.getElementById("watchlistViewport");
 
 const watchlistState = {
   movies: [],
@@ -135,17 +137,17 @@ const watchlistState = {
 function toggleWatchlistCardHighlight(entityId, shouldHighlight) {
   if (entityId == null) return;
 
-  const highlightClass = 'is-watchlisted';
+  const highlightClass = "is-watchlisted";
   const id = String(entityId);
   const selectors = [
     `.movie-card[data-movie-id="${id}"]`,
     `.movie-card[data-series-id="${id}"]`,
     `.series-card[data-series-id="${id}"]`,
-    `.top-movie-card[data-movie-id="${id}"]`
+    `.top-movie-card[data-movie-id="${id}"]`,
   ];
 
-  selectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(card => {
+  selectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((card) => {
       if (shouldHighlight) {
         card.classList.add(highlightClass);
       } else {
@@ -155,23 +157,23 @@ function toggleWatchlistCardHighlight(entityId, shouldHighlight) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (window.location.pathname.includes('watchlist.html')) {
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.pathname.includes("watchlist.html")) {
     initializeWatchlistPage();
   }
 
-  document.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('watchlist-btn')) {
+  document.addEventListener("click", async function (e) {
+    if (e.target.classList.contains("watchlist-btn")) {
       e.preventDefault();
-      console.log('Watchlist button clicked!', e.target);
-      
+      console.log("Watchlist button clicked!", e.target);
+
       const movieId = parseInt(e.target.dataset.movieId);
-      const movieData = JSON.parse(e.target.dataset.movieData || '{}');
-      console.log('Movie data:', { movieId, movieData });
-      
+      const movieData = JSON.parse(e.target.dataset.movieData || "{}");
+      console.log("Movie data:", { movieId, movieData });
+
       const isInWatchlist = await isMovieInWatchlist(movieId);
-      console.log('Is in watchlist:', isInWatchlist);
-      
+      console.log("Is in watchlist:", isInWatchlist);
+
       if (isInWatchlist) {
         await removeFromWatchlist(movieId);
       } else {
@@ -179,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    if (e.target.classList.contains('remove-from-watchlist')) {
+    if (e.target.classList.contains("remove-from-watchlist")) {
       e.preventDefault();
       const movieId = parseInt(e.target.dataset.movieId);
       await removeFromWatchlist(movieId);
@@ -192,9 +194,9 @@ async function initializeWatchlistPage() {
   initializeWatchlistCarousel();
 
   const user = getCurrentUser();
-  
+
   if (!user) {
-    showWatchlistState('notLoggedIn');
+    showWatchlistState("notLoggedIn");
     return;
   }
 
@@ -203,28 +205,28 @@ async function initializeWatchlistPage() {
 
 async function displayWatchlist() {
   const user = getCurrentUser();
-  
+
   if (!user) {
-    showWatchlistState('notLoggedIn');
+    showWatchlistState("notLoggedIn");
     return;
   }
 
-  showWatchlistState('loading');
+  showWatchlistState("loading");
 
   try {
     const watchlist = await getUserWatchlist();
-    
+
     if (watchlist.length === 0) {
       watchlistState.movies = [];
       watchlistState.totalSlides = 0;
       if (watchlistCarousel) {
-        watchlistCarousel.innerHTML = '';
+        watchlistCarousel.innerHTML = "";
       }
       if (watchlistDots) {
-        watchlistDots.innerHTML = '';
+        watchlistDots.innerHTML = "";
       }
       refreshWatchlistHighlights([]);
-      showWatchlistState('empty');
+      showWatchlistState("empty");
       return;
     }
 
@@ -233,31 +235,31 @@ async function displayWatchlist() {
     watchlistState.currentSlide = 0;
     watchlistState.itemsPerSlide = calculateWatchlistItemsPerSlide();
 
-    showWatchlistState('content');
+    showWatchlistState("content");
     renderWatchlistCarousel();
     refreshWatchlistHighlights(normalizedWatchlist);
   } catch (error) {
-    console.error('Error loading watchlist:', error);
-    showWatchlistState('empty');
+    console.error("Error loading watchlist:", error);
+    showWatchlistState("empty");
   }
 }
 
 function showWatchlistState(state) {
-  const loadingEl = document.getElementById('watchlistLoading');
-  const emptyEl = document.getElementById('watchlistEmpty');
-  const notLoggedInEl = document.getElementById('watchlistNotLoggedIn');
+  const loadingEl = document.getElementById("watchlistLoading");
+  const emptyEl = document.getElementById("watchlistEmpty");
+  const notLoggedInEl = document.getElementById("watchlistNotLoggedIn");
 
   if (loadingEl) {
-    loadingEl.hidden = state !== 'loading';
+    loadingEl.hidden = state !== "loading";
   }
   if (emptyEl) {
-    emptyEl.hidden = state !== 'empty';
+    emptyEl.hidden = state !== "empty";
   }
   if (notLoggedInEl) {
-    notLoggedInEl.hidden = state !== 'notLoggedIn';
+    notLoggedInEl.hidden = state !== "notLoggedIn";
   }
 
-  const showCarousel = state === 'content';
+  const showCarousel = state === "content";
 
   if (watchlistViewport) {
     watchlistViewport.hidden = !showCarousel;
@@ -316,7 +318,7 @@ function renderWatchlistCarousel() {
     }
   }
 
-  paddedMovies.forEach(movie => {
+  paddedMovies.forEach((movie) => {
     const listItem = document.createElement("li");
     listItem.className = "top-movies__item";
 
@@ -331,8 +333,14 @@ function renderWatchlistCarousel() {
     watchlistCarousel.appendChild(listItem);
   });
 
-  watchlistState.totalSlides = Math.max(Math.ceil(movies.length / itemsPerSlide), 1);
-  watchlistState.currentSlide = Math.min(watchlistState.currentSlide, watchlistState.totalSlides - 1);
+  watchlistState.totalSlides = Math.max(
+    Math.ceil(movies.length / itemsPerSlide),
+    1,
+  );
+  watchlistState.currentSlide = Math.min(
+    watchlistState.currentSlide,
+    watchlistState.totalSlides - 1,
+  );
 
   renderWatchlistDots();
   updateWatchlistCarousel({ immediate: true });
@@ -341,9 +349,14 @@ function renderWatchlistCarousel() {
 function createWatchlistCarouselCard(movie) {
   const normalizedMovie = normalizeWatchlistEntry(movie);
   const posterUrl = escapeHtmlValue(
-    normalizedMovie.poster_path || "https://via.placeholder.com/500x750?text=No+Poster"
+    normalizedMovie.poster_path ||
+      "https://via.placeholder.com/500x750?text=No+Poster",
   );
-  const rawTitle = normalizedMovie.title || normalizedMovie.name || normalizedMovie.original_title || "Untitled Title";
+  const rawTitle =
+    normalizedMovie.title ||
+    normalizedMovie.name ||
+    normalizedMovie.original_title ||
+    "Untitled Title";
   const title = escapeHtmlValue(rawTitle);
   const rawYear =
     normalizedMovie.releaseYear ||
@@ -424,7 +437,8 @@ function handleWatchlistCardClick(movie) {
   }
 
   const mediaType = deriveMediaType(movie);
-  const storageKey = mediaType === "series" ? "series:selectedSeries" : "movies:selectedMovie";
+  const storageKey =
+    mediaType === "series" ? "series:selectedSeries" : "movies:selectedMovie";
   const targetPage = mediaType === "series" ? "series.html" : "movies.html";
 
   try {
@@ -528,7 +542,9 @@ function handleWatchlistResize() {
     return;
   }
 
-  watchlistState.currentSlide = Math.floor(firstVisibleIndex / newItemsPerSlide);
+  watchlistState.currentSlide = Math.floor(
+    firstVisibleIndex / newItemsPerSlide,
+  );
   renderWatchlistCarousel();
 }
 
@@ -537,7 +553,10 @@ function applyWatchlistLayout() {
     return;
   }
 
-  watchlistCarousel.style.setProperty("--items-per-slide", String(watchlistState.itemsPerSlide));
+  watchlistCarousel.style.setProperty(
+    "--items-per-slide",
+    String(watchlistState.itemsPerSlide),
+  );
 }
 
 function updateWatchlistCarousel({ immediate = false } = {}) {
@@ -555,7 +574,7 @@ function updateWatchlistCarousel({ immediate = false } = {}) {
 
   watchlistState.currentSlide = Math.max(
     0,
-    Math.min(watchlistState.currentSlide, slideCount - 1)
+    Math.min(watchlistState.currentSlide, slideCount - 1),
   );
 
   const offsetValue = `-${watchlistState.currentSlide * 100}%`;
@@ -584,7 +603,7 @@ function updateWatchlistCarousel({ immediate = false } = {}) {
 
   if (watchlistDots) {
     watchlistDots.hidden = slideCount <= 1;
-    Array.from(watchlistDots.children).forEach(dot => {
+    Array.from(watchlistDots.children).forEach((dot) => {
       if (!(dot instanceof HTMLButtonElement)) {
         return;
       }
@@ -623,25 +642,31 @@ export async function refreshWatchlistHighlights(providedWatchlist) {
   }
 
   const normalizedItems = watchlistItems.map(normalizeWatchlistEntry);
-  const idSet = new Set(normalizedItems.map(item => String(item.id)));
+  const idSet = new Set(normalizedItems.map((item) => String(item.id)));
 
-  document.querySelectorAll(".movie-card[data-movie-id]").forEach(card => {
+  document.querySelectorAll(".movie-card[data-movie-id]").forEach((card) => {
     const cardId = card.dataset.movieId;
     if (!cardId) return;
     card.classList.toggle("is-watchlisted", idSet.has(cardId));
   });
 
-  document.querySelectorAll(".movie-card[data-series-id], .series-card[data-series-id]").forEach(card => {
-    const cardId = card.dataset.seriesId;
-    if (!cardId) return;
-    card.classList.toggle("is-watchlisted", idSet.has(cardId));
-  });
+  document
+    .querySelectorAll(
+      ".movie-card[data-series-id], .series-card[data-series-id]",
+    )
+    .forEach((card) => {
+      const cardId = card.dataset.seriesId;
+      if (!cardId) return;
+      card.classList.toggle("is-watchlisted", idSet.has(cardId));
+    });
 }
 
 function clearWatchlistHighlights() {
-  document.querySelectorAll(".movie-card.is-watchlisted, .series-card.is-watchlisted").forEach(card => {
-    card.classList.remove("is-watchlisted");
-  });
+  document
+    .querySelectorAll(".movie-card.is-watchlisted, .series-card.is-watchlisted")
+    .forEach((card) => {
+      card.classList.remove("is-watchlisted");
+    });
 }
 
 function calculateWatchlistItemsPerSlide() {
@@ -679,7 +704,11 @@ export function deriveMediaType(entry) {
     }
   }
 
-  if (entry.first_air_date || entry.number_of_seasons || entry.episode_run_time) {
+  if (
+    entry.first_air_date ||
+    entry.number_of_seasons ||
+    entry.episode_run_time
+  ) {
     return "series";
   }
 
@@ -700,6 +729,6 @@ function escapeHtmlValue(value) {
 }
 
 export function getCurrentUser() {
-  const userString = localStorage.getItem('user');
+  const userString = localStorage.getItem("user");
   return userString ? JSON.parse(userString) : null;
 }

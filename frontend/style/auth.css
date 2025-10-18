@@ -27,7 +27,11 @@
 
 /* Hero panel with teal accent gradient */
 .auth-panel--primary {
-  background: radial-gradient(circle at 10% 20%, rgba(31, 200, 164, 0.35), rgba(8, 16, 20, 0.95));
+  background: radial-gradient(
+    circle at 10% 20%,
+    rgba(31, 200, 164, 0.35),
+    rgba(8, 16, 20, 0.95)
+  );
   border-color: rgba(31, 200, 164, 0.32);
   color: var(--nav-text);
 }
@@ -229,7 +233,7 @@
 /* Extend divider lines to fill available space */
 .auth-form__divider::before,
 .auth-form__divider::after {
-  content: '';
+  content: "";
   flex: 1 1 auto;
   height: 1px;
   background: rgba(244, 251, 248, 0.18);
@@ -281,7 +285,9 @@
   padding: 0.75rem 0.85rem;
   border-radius: 0.875rem;
   border: 1px solid transparent;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 /* Size radio inputs to match rest of UI */

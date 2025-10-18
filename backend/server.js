@@ -45,11 +45,11 @@ if (SSL_CERT_FILE && SSL_KEY_FILE) {
   } catch (error) {
     console.error(
       "Failed to start HTTPS server. Falling back to HTTP only.",
-      error
+      error,
     );
   }
 } else {
   console.log(
-    "SSL_CERT_FILE or SSL_KEY_FILE not set. HTTPS endpoint will not be started."
+    "SSL_CERT_FILE or SSL_KEY_FILE not set. HTTPS endpoint will not be started.",
   );
 }

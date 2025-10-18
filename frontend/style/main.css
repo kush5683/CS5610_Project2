@@ -18,10 +18,25 @@
 /* Full-page backdrop with flexible vertical layout */
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   min-height: 100vh;
-  background: radial-gradient(circle at 8% -15%, rgba(31, 200, 164, 0.28), transparent 55%),
-    radial-gradient(circle at 88% 5%, rgba(255, 138, 61, 0.22), transparent 60%),
+  background:
+    radial-gradient(
+      circle at 8% -15%,
+      rgba(31, 200, 164, 0.28),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 88% 5%,
+      rgba(255, 138, 61, 0.22),
+      transparent 60%
+    ),
     var(--bg);
   color: var(--nav-text);
   display: flex;
@@ -43,7 +58,11 @@ main {
   top: 0;
   width: 100%;
   backdrop-filter: blur(16px);
-  background: linear-gradient(135deg, rgba(8, 18, 22, 0.94), rgba(5, 10, 14, 0.94));
+  background: linear-gradient(
+    135deg,
+    rgba(8, 18, 22, 0.94),
+    rgba(5, 10, 14, 0.94)
+  );
   border-bottom: 1px solid var(--nav-border);
   z-index: 1000;
 }
@@ -138,7 +157,9 @@ main {
   letter-spacing: 0.04em;
   border: none;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 /* Visible focus ring for keyboard navigation */
@@ -167,7 +188,12 @@ main {
 
 /* Gradient primary button with glow */
 .btn--primary {
-  background: radial-gradient(circle at 0% 50%, var(--accent) 0%, #2de37b 60%, var(--accent-alt) 120%);
+  background: radial-gradient(
+    circle at 0% 50%,
+    var(--accent) 0%,
+    #2de37b 60%,
+    var(--accent-alt) 120%
+  );
   color: var(--nav-text);
   box-shadow: 0 6px 18px rgba(31, 200, 164, 0.32);
 }
@@ -234,7 +260,11 @@ main {
 /* Gradient footer bar with glass effect */
 .wtw-footer {
   border-top: 1px solid var(--nav-border);
-  background: linear-gradient(135deg, rgba(6, 12, 16, 0.92), rgba(10, 20, 26, 0.88));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 12, 16, 0.92),
+    rgba(10, 20, 26, 0.88)
+  );
   backdrop-filter: blur(12px);
   color: var(--nav-text-muted);
   padding: clamp(1.5rem, 3vw, 2.25rem) 0;
@@ -269,7 +299,9 @@ main {
   color: var(--nav-text);
   font-weight: 600;
   text-decoration: none;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 /* Elevate CTA on hover/focus */
@@ -337,7 +369,9 @@ main {
   appearance: none;
   min-width: 7rem;
   position: relative;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .movies-controls select:hover {
@@ -400,7 +434,9 @@ main {
   flex-direction: column;
   backdrop-filter: blur(10px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   cursor: pointer;
 }
 
@@ -422,18 +458,24 @@ main {
 .series-card.is-watchlisted,
 .watchlist-card.is-watchlisted {
   border: 1px solid rgba(31, 200, 164, 0.68);
-  box-shadow: 0 0 0 3px rgba(31, 200, 164, 0.72), 0 26px 52px rgba(31, 200, 164, 0.18);
+  box-shadow:
+    0 0 0 3px rgba(31, 200, 164, 0.72),
+    0 26px 52px rgba(31, 200, 164, 0.18);
 }
 
 .movie-card.is-watchlisted:hover,
 .movie-card.is-watchlisted:focus-within,
 .series-card.is-watchlisted:hover,
 .series-card.is-watchlisted:focus-within {
-  box-shadow: 0 0 0 3px rgba(31, 200, 164, 0.85), 0 30px 58px rgba(31, 200, 164, 0.22);
+  box-shadow:
+    0 0 0 3px rgba(31, 200, 164, 0.85),
+    0 30px 58px rgba(31, 200, 164, 0.22);
 }
 
 .movie-card--selected {
-  box-shadow: 0 0 0 3px rgba(31, 200, 164, 0.65), 0 28px 50px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 0 3px rgba(31, 200, 164, 0.65),
+    0 28px 50px rgba(0, 0, 0, 0.35);
 }
 
 .movie-card__poster {

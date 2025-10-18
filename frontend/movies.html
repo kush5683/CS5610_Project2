@@ -1,107 +1,153 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Movies — What To Watch</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style/main.css">
-  <link rel="stylesheet" href="style/movie-detail.css">
-</head>
-<body>
-  <header class="wtw-nav">
-    <div class="wtw-nav__inner">
-      <a class="wtw-nav__brand" href="index.html"><span class="brand-icon">🎬</span>What To Watch</a>
-      <nav class="wtw-nav__primary" aria-label="Primary navigation">
-        <ul class="wtw-nav__links">
-          <li><a href="index.html">Home</a></li>
-          <li><a class="active" aria-current="page" href="movies.html">Movies</a></li>
-          <li><a href="series.html">Series</a></li>
-          <li><a href="watchlist.html">Watchlist</a></li>
-        </ul>
-      </nav>
-      <div class="wtw-nav__actions">
-        <a class="btn btn--ghost" href="sign-in.html">Sign In</a>
-        <a class="btn btn--primary" href="get-started.html">Get Started</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Movies — What To Watch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="style/movie-detail.css" />
+  </head>
+  <body>
+    <header class="wtw-nav">
+      <div class="wtw-nav__inner">
+        <a class="wtw-nav__brand" href="index.html"
+          ><span class="brand-icon">🎬</span>What To Watch</a
+        >
+        <nav class="wtw-nav__primary" aria-label="Primary navigation">
+          <ul class="wtw-nav__links">
+            <li><a href="index.html">Home</a></li>
+            <li>
+              <a class="active" aria-current="page" href="movies.html"
+                >Movies</a
+              >
+            </li>
+            <li><a href="series.html">Series</a></li>
+            <li><a href="watchlist.html">Watchlist</a></li>
+          </ul>
+        </nav>
+        <div class="wtw-nav__actions">
+          <a class="btn btn--ghost" href="sign-in.html">Sign In</a>
+          <a class="btn btn--primary" href="get-started.html">Get Started</a>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="movies-page">
-    <section class="movies-header">
-      <h1>Movies</h1>
-      <p>Browse theatrical releases and streaming hits from our catalog.</p>
-    </section>
+    <main class="movies-page">
+      <section class="movies-header">
+        <h1>Movies</h1>
+        <p>Browse theatrical releases and streaming hits from our catalog.</p>
+      </section>
 
-    <section class="movies-controls">
-      <div class="movies-controls__group">
-        <label for="pageSizeSelect">Movies per page</label>
-        <select id="pageSizeSelect">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="250">250</option>
-          <option value="500">500</option>
-        </select>
-      </div>
-      <div class="movies-controls__pagination">
-        <button id="prevPageBtn" class="btn btn--ghost" type="button">Previous</button>
-        <span id="paginationInfo" aria-live="polite">Page 1</span>
-        <button id="nextPageBtn" class="btn btn--ghost" type="button">Next</button>
-      </div>
-    </section>
+      <section class="movies-controls">
+        <div class="movies-controls__group">
+          <label for="pageSizeSelect">Movies per page</label>
+          <select id="pageSizeSelect">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="500">500</option>
+          </select>
+        </div>
+        <div class="movies-controls__pagination">
+          <button id="prevPageBtn" class="btn btn--ghost" type="button">
+            Previous
+          </button>
+          <span id="paginationInfo" aria-live="polite">Page 1</span>
+          <button id="nextPageBtn" class="btn btn--ghost" type="button">
+            Next
+          </button>
+        </div>
+      </section>
 
-    <section id="moviesGrid" class="movies-grid" aria-live="polite"></section>
-  </main>
+      <section id="moviesGrid" class="movies-grid" aria-live="polite"></section>
+    </main>
 
-  <section id="movieModal" class="movie-modal" aria-hidden="true">
-    <div class="movie-modal__backdrop" data-close-movie-modal></div>
-    <div class="movie-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="movieDetailTitle">
-      <button id="movieModalClose" class="movie-modal__close" type="button" aria-label="Close movie details">&times;</button>
-      <div class="suggestion-result" id="movieDetailResult">
-        <div class="suggestion-layout">
-          <div class="suggestion-layout__poster">
-            <div class="card suggestion-card suggestion-card--poster">
-              <div class="card-body">
-                <div class="suggestion-card__poster" id="movieDetailPoster">Poster</div>
+    <section id="movieModal" class="movie-modal" aria-hidden="true">
+      <div class="movie-modal__backdrop" data-close-movie-modal></div>
+      <div
+        class="movie-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="movieDetailTitle"
+      >
+        <button
+          id="movieModalClose"
+          class="movie-modal__close"
+          type="button"
+          aria-label="Close movie details"
+        >
+          &times;
+        </button>
+        <div class="suggestion-result" id="movieDetailResult">
+          <div class="suggestion-layout">
+            <div class="suggestion-layout__poster">
+              <div class="card suggestion-card suggestion-card--poster">
+                <div class="card-body">
+                  <div class="suggestion-card__poster" id="movieDetailPoster">
+                    Poster
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="suggestion-layout__title">
-            <div class="card suggestion-card suggestion-card--title">
-              <div class="card-body">
-                <div class="suggestion-card__header">
-                  <div class="suggestion-card__primary">
-                    <h3 class="suggestion-card__title" id="movieDetailTitle">Title</h3>
-                    <span class="badge bg-warning text-dark text-uppercase fw-semibold" id="movieDetailReleaseDate">Year</span>
+            <div class="suggestion-layout__title">
+              <div class="card suggestion-card suggestion-card--title">
+                <div class="card-body">
+                  <div class="suggestion-card__header">
+                    <div class="suggestion-card__primary">
+                      <h3 class="suggestion-card__title" id="movieDetailTitle">
+                        Title
+                      </h3>
+                      <span
+                        class="badge bg-warning text-dark text-uppercase fw-semibold"
+                        id="movieDetailReleaseDate"
+                        >Year</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="suggestion-layout__description">
+              <div class="card suggestion-card suggestion-card--description">
+                <div class="card-body">
+                  <p
+                    class="suggestion-card__description"
+                    id="movieDetailDescription"
+                  >
+                    Overview will appear here.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="suggestion-layout__providers">
+              <div class="card suggestion-card suggestion-card--providers">
+                <div class="card-body">
+                  <h4 class="suggestion-card__providers-title">
+                    Available On:
+                  </h4>
+                  <div
+                    class="suggestion-card__providers-list"
+                    id="movieDetailProviders"
+                  >
+                    Providers will appear here.
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="suggestion-layout__description">
-            <div class="card suggestion-card suggestion-card--description">
-              <div class="card-body">
-                <p class="suggestion-card__description" id="movieDetailDescription">Overview will appear here.</p>
-              </div>
-            </div>
-          </div>
-          <div class="suggestion-layout__providers">
-            <div class="card suggestion-card suggestion-card--providers">
-              <div class="card-body">
-                <h4 class="suggestion-card__providers-title">Available On:</h4>
-                <div class="suggestion-card__providers-list" id="movieDetailProviders">Providers will appear here.</div>
-              </div>
-            </div>
-          </div>
         </div>
+        <div id="movieDetailActions" class="movie-detail__actions"></div>
       </div>
-      <div id="movieDetailActions" class="movie-detail__actions"></div>
-    </div>
-  </section>
+    </section>
 
-  <script src="js/auth.js"></script>
-  <script type="module" src="js/movies.js"></script>
-</body>
+    <script src="js/auth.js"></script>
+    <script type="module" src="js/movies.js"></script>
+  </body>
 </html>
