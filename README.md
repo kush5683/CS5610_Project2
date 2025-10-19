@@ -17,6 +17,10 @@ Full-stack movie and TV series discovery app built with Node.js, Express 5, Mong
 
 Create a responsive companion site that showcases movies and television series, offers random recommendations, and lets authenticated users curate their own watchlist. The project demonstrates full-stack development skills including API design, persistence, authentication, and deployment.
 
+## Design Document
+
+https://docs.google.com/document/d/1JzzitCdsWYNjTBzZcTEOKHrnFyqauuUyvZvZR0Uo1ic/edit?usp=sharing
+
 ## Screenshot
 
 ![What to Watch home page](submission-content/wtw-home.png)
