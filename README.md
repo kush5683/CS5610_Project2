@@ -19,7 +19,7 @@ Create a responsive companion site that showcases movies and television series, 
 
 ## Design Document
 
-https://docs.google.com/document/d/1JzzitCdsWYNjTBzZcTEOKHrnFyqauuUyvZvZR0Uo1ic/edit?usp=sharing
+https://drive.google.com/file/d/1ZSJccCi_MdsyUduR1faiY4WQOZFRHv_H/view?usp=sharing
 
 ## Screenshot
 
