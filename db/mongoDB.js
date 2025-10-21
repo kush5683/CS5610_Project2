@@ -5,7 +5,7 @@ export default function mongoDB({
   userCollection = "users",
   movieCollection = "Movies",
   seriesCollection = "Series",
-  defaultUri = "mongodb://localhost:27017/",
+  defaultUri = "mongodb://localhost:27017/", // MongoDB Credentials exposed, we need to fix this by using environment variables (using a .env file)
 } = {}) {
   const me = {};
   const uri = process.env.MONGODB_URI || defaultUri;
