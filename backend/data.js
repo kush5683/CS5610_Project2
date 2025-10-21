@@ -74,6 +74,7 @@ router.get("/series", async (req, res) => {
   }
 });
 
+// Using plain text passwords is an issue, we need to use import bcrypt from 'bcrypt';
 // User authentication routes using MongoDB
 router.post("/register-user", async (req, res) => {
   try {
